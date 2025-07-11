@@ -11,6 +11,14 @@ public class ChessComApiClient {
 
     private static final String BASE_URL = "https://api.chess.com/pub/player/";
 
+
+    /**
+     * Scarica la lista degli archivi mensili delle partite giocate dall'utente negli ultimi 12 mesi.
+     *
+     * @param username Nome utente su chess.com
+     * @return Risposta dell'API contenente una lista di URL, uno per ogni mese
+     * @throws Exception Se si verifica un errore durante la chiamata API
+     */
     public static PlayerGameResponse getPlayerArchives(String username) throws Exception {
         String url = BASE_URL + username + "/games/archives";
 
