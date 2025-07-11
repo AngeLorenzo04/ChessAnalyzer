@@ -19,9 +19,11 @@ Il programma effettua una richiesta HTTP all'API di chess.com, recupera gli arch
 - Separazione pulita tra logica di rete, modello dati e punto di ingresso (`Main.java`)
 
 ### Output atteso:
-`Archivi trovati per nomeUtente:`
-`https://api.chess.com/pub/player/nomeUtente/games/2024/03`
-`https://api.chess.com/pub/player/nomeUtente/games/2024/02`
+```
+Archivi trovati per nomeUtente:
+https://api.chess.com/pub/player/nomeUtente/games/2024/03
+https://api.chess.com/pub/player/nomeUtente/games/2024/02
+```
 
 ---
 
