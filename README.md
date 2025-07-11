@@ -10,12 +10,13 @@ Il programma effettua una richiesta HTTP all'API di chess.com, recupera gli arch
 
 ---
 
-## 🧩 Funzionalità Implementate (Step 1)
+## 🧩 Funzionalità Implementate (Step 1 & Step 2)
 
 - Chiamata API a:  
   `https://api.chess.com/pub/player/ {username}/games/archives`
 - Parsing della risposta JSON tramite libreria **Gson**
-- Creazione della classe `PlayerGameResponse` per rappresentare i dati ricevuti
+- Scaricamento delle partite mensili da ogni URL ricevuto
+- Estrazione corretta del vincitore (`white`, `black`, `draw`) dal campo `result` di `white` e `black`
 - Separazione pulita tra logica di rete, modello dati e punto di ingresso (`Main.java`)
 
 ### Output atteso:
@@ -48,5 +49,7 @@ chess-analyzer/
 ├── api/                  # gestione API
 │   ├── ChessComApiClient.java
 │   └── PlayerGameResponse.java
-├── WORK IN PROGRESS...
+├── model/
+|   └──Game # singola partita
+└── WORK IN PROGRESS...
 ```
