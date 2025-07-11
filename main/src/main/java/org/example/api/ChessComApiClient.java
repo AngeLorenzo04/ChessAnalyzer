@@ -1,11 +1,16 @@
 package org.example.api;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.example.model.Game;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.lang.reflect.Type;
+
 
 public class ChessComApiClient {
 
@@ -36,5 +41,30 @@ public class ChessComApiClient {
 
         Gson gson = new Gson();
         return gson.fromJson(response.body(), PlayerGameResponse.class);
+    }
+
+    /**
+     * Scarica le partite giocate in un mese specifico.
+     *
+     * @param monthlyArchiveUrl URL del mese specifico (es. https://api.chess.com/.../2024/03 )
+     * @return Lista di oggetti Game, ognuno rappresenta una singola partita
+     * @throws Exception Se si verifica un errore durante la chiamata API
+     */
+    public static List<Game> getMonthlyGames(String monthlyArchiveUrl) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(monthlyArchiveUrl))
+                .header("Accept", "application/json")
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Errore nella chiamata API: " + response.statusCode());
+        }
+
+        Gson gson = new Gson();
+
+        return gson.fromJson(response.body(), MonthlyGameResponse.class).getGames();
     }
 }
