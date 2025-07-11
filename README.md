@@ -40,6 +40,7 @@ https://api.chess.com/pub/player/nomeUtente/games/2024/02
 ---
 
 ## 📁 Struttura del Progetto
+```
 chess-analyzer/
 ├── core/                 # logica principale
 │   ├── Main.java
@@ -48,4 +49,4 @@ chess-analyzer/
 │   ├── ChessComApiClient.java
 │   └── PlayerGameResponse.java
 ├── WORK IN PROGRESS...
-
+```
