@@ -51,11 +51,10 @@ Con la libreria [Gson](https://github.com/google/gson), è possibile fare questa
 ```java
 import com.google.gson.Gson;
 
+String json = "{\"nome\":\"Luca\", \"eta\":25}";
 Gson gson = new Gson();
-return gson.fromJson(response.body(), PlayerGameResponse.class);
 
-
-
+Persona persona = gson.fromJson(json, Persona.class);
 ```
 
 > In questo esempio, la stringa JSON viene "parsata" e trasformata in un oggetto `Persona`.
