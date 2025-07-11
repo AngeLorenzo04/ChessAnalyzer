@@ -40,6 +40,40 @@ https://api.chess.com/pub/player/nomeUtente/games/2024/02
 
 ---
 
+### 🔍 Cos'è il Parsing (con Gson)
+
+Il **parsing** di un JSON è il processo con cui si **converte una stringa JSON in un oggetto Java**.
+
+Con la libreria [Gson](https://github.com/google/gson), è possibile fare questa operazione in modo semplice:
+
+#### 📥 Da JSON a Oggetto Java (parsing)
+
+```java
+import com.google.gson.Gson;
+
+Gson gson = new Gson();
+return gson.fromJson(response.body(), PlayerGameResponse.class);
+
+
+
+```
+
+> In questo esempio, la stringa JSON viene "parsata" e trasformata in un oggetto `Persona`.
+
+#### 📤 Da Oggetto Java a JSON (serializzazione)
+
+```java
+Persona p = new Persona();
+p.nome = "Anna";
+p.eta = 30;
+
+String json = gson.toJson(p);
+```
+
+> La conversione inversa si chiama **serializzazione**: un oggetto Java viene trasformato in una stringa JSON.
+
+
+
 ## 📁 Struttura del Progetto
 ```
 chess-analyzer/
