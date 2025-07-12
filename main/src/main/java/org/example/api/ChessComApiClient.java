@@ -1,28 +1,22 @@
 package org.example.api;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.example.model.Game;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
-
 public class ChessComApiClient {
 
     private static final String BASE_URL = "https://api.chess.com/pub/player/";
 
-
     /**
-     * Scarica la lista degli archivi mensili delle partite giocate dall'utente negli ultimi 12 mesi.
-     *
-     * @param username Nome utente su chess.com
-     * @return Risposta dell'API contenente una lista di URL, uno per ogni mese
-     * @throws Exception Se si verifica un errore durante la chiamata API
+     * Scarica gli archivi mensili dell'utente
      */
-    public static PlayerGameResponse getPlayerArchives(String username) throws Exception {
+    public static List<String> getPlayerMonthlyArchives(String username) throws Exception {
         String url = BASE_URL + username + "/games/archives";
 
         HttpClient client = HttpClient.newHttpClient();
@@ -38,15 +32,13 @@ public class ChessComApiClient {
         }
 
         Gson gson = new Gson();
-        return gson.fromJson(response.body(), PlayerGameResponse.class);
+        PlayerGameResponse playerGameResponse = gson.fromJson(response.body(), PlayerGameResponse.class);
+
+        return playerGameResponse.getArchives(); //Estrai correttamente la lista
     }
 
     /**
-     * Scarica le partite giocate in un mese specifico.
-     *
-     * @param monthlyArchiveUrl URL del mese specifico
-     * @return Lista di oggetti Game, ognuno rappresenta una singola partita
-     * @throws Exception Se si verifica un errore durante la chiamata API
+     * Scarica tutte le partite di un mese
      */
     public static List<Game> getMonthlyGames(String monthlyArchiveUrl) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
@@ -62,7 +54,6 @@ public class ChessComApiClient {
         }
 
         Gson gson = new Gson();
-
         return gson.fromJson(response.body(), MonthlyGameResponse.class).getGames();
     }
 }
