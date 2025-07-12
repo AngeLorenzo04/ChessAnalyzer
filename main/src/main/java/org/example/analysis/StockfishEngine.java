@@ -37,7 +37,7 @@ public class StockfishEngine implements AutoCloseable {
     /**
      * Invia un comando a Stockfish
      */
-    private void sendCommand(String command) throws IOException {
+    public void sendCommand(String command) throws IOException {
         writer.write(command + "\n");
         writer.flush();
     }
@@ -45,7 +45,7 @@ public class StockfishEngine implements AutoCloseable {
     /**
      * Legge l'output finché non trova la parola chiave
      */
-    private String readUntil(String keyword) throws IOException {
+    public String readUntil(String keyword) throws IOException {
         StringBuilder output = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
@@ -90,16 +90,26 @@ public class StockfishEngine implements AutoCloseable {
      */
     public static List<String> extractMovesFromPGN(String pgn) {
         List<String> moves = new ArrayList<>();
+
+        // Rimuove l'intestazione tra parentesi quadre
         String[] lines = pgn.split("\n");
+        boolean inMoves = false;
 
         for (String line : lines) {
-            if (line.trim().startsWith("1.") || line.contains("...")) {
-                Pattern pattern = Pattern.compile("(\\d+\\.\\s*[^\\s\\{]+)");
-                Matcher matcher = pattern.matcher(line);
+            line = line.trim();
 
-                while (matcher.find()) {
-                    String move = matcher.group(1).replaceAll("\\d+\\.\\s*", "").trim();
-                    moves.add(move);
+            // Ignora le righe di intestazione
+            if (line.startsWith("[")) continue;
+
+            // Le righe successive sono le mosse
+            if (!line.isEmpty()) {
+                inMoves = true;
+                String[] parts = line.split("\\s+");
+
+                for (String part : parts) {
+                    // Esclude numeri di mossa (es. "1." o "37...") e simboli come "{" o "}"
+                    if (part.matches("[a-zA-Z0-9\\-\\=]+") && !part.matches("\\d+\\."))
+                        moves.add(part.replace("...", "").replace("+", ""));
                 }
             }
         }
