@@ -1,7 +1,6 @@
 package org.example.api;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.example.model.Game;
 
 import java.net.URI;
@@ -9,7 +8,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
-import java.lang.reflect.Type;
 
 
 public class ChessComApiClient {
@@ -46,7 +44,7 @@ public class ChessComApiClient {
     /**
      * Scarica le partite giocate in un mese specifico.
      *
-     * @param monthlyArchiveUrl URL del mese specifico (es. https://api.chess.com/.../2024/03 )
+     * @param monthlyArchiveUrl URL del mese specifico
      * @return Lista di oggetti Game, ognuno rappresenta una singola partita
      * @throws Exception Se si verifica un errore durante la chiamata API
      */
