@@ -44,10 +44,11 @@ public class StockfishEngine implements AutoCloseable {
     public static List<String> extractMovesFromPGN(String pgn) {
         List<String> moves = new ArrayList<>();
 
+        // Rimuove l'intestazione [Event...], [White...]
         String cleaned = pgn.replaceAll("\\[.*\n", "")
-                .replaceAll("\\{.*?\\}", "")
+                .replaceAll("\\{.*?\\}", "")   // Rimuove commenti tipo {%clk ...}
                 .replaceAll("\\$.*?\\$", "")
-                .replaceAll("(\\s)+", " ")
+                .replaceAll("(\\s)+", " ")    // Unisce spazi multipli
                 .trim();
 
         String[] tokens = cleaned.split(" ");
@@ -62,6 +63,9 @@ public class StockfishEngine implements AutoCloseable {
     /**
      * Imposta la posizione completa usando initial_setup + lista mosse
      */
+    /**
+     * Imposta la posizione completa usando initial_setup + lista di mosse
+     */
     public void setPosition(List<String> allMoves, String initialSetup) throws IOException {
         StringBuilder command = new StringBuilder("position fen ").append(initialSetup).append(" moves");
 
@@ -73,6 +77,7 @@ public class StockfishEngine implements AutoCloseable {
         }
 
         sendCommand(command.toString());
+        sendCommand("go depth 10");
     }
 
     /**

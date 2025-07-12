@@ -54,22 +54,29 @@ public class Game {
         return whiteResult;
     }
 
-    public void analyzeWithStockfish(String stockfishPath, int depth) {
+    public void analyzeWithStockfish(String stockfishPath) {
         try (StockfishEngine engine = new StockfishEngine(stockfishPath)) {
+            System.out.println("\nAnalisi della partita: " + this.getUrl());
+
             List<String> moves = StockfishEngine.extractMovesFromPGN(this.getPgn());
 
-            // Usa initial_setup + mosse giocate per costruire la posizione
+            // Manda a Stockfish la posizione completa
             engine.setPosition(moves, this.getInitial_setup());
 
+            // Richiedi l'analisi
             String analysis = engine.readUntil("bestmove");
 
-            System.out.println("\nAnalisi della partita: " + this.getUrl());
-            System.out.println("Vincitore: " + this.getWinner());
-            System.out.println("Valutazione: " + parseEvaluation(analysis));
-            System.out.println("Miglior mossa: " + parseBestMove(analysis));
+            // Stampa risultati
+            String evaluation = parseEvaluation(analysis);
+            String bestMove = parseBestMove(analysis);
+
+            System.out.println("Valutazione finale: " + evaluation);
+            System.out.println("Miglior mossa finale: " + bestMove);
+            System.out.println("FEN attuale: " + this.getFen());
 
         } catch (Exception e) {
             System.err.println("Errore nell'analisi: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
