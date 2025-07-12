@@ -1,5 +1,8 @@
 package org.example.model;
 
+import org.example.analysis.StockfishEngine;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,5 +74,73 @@ public class Game {
         } else this.winner = "draw";
 
     }
+
+    /**
+     * Analizza la partita usando il motore Stockfish
+     *
+     * @param stockfishPath Percorso dell'eseguibile Stockfish
+     * @param depth Profondità di analisi (es. 10)
+     */
+    public void analyzeWithStockfish(String stockfishPath, int depth) {
+        try (StockfishEngine engine = new StockfishEngine(stockfishPath)) {
+            System.out.println("\nAnalisi della partita: " + this.getUrl());
+
+            List<String> moves = StockfishEngine.extractMovesFromPGN(this.getPgn());
+            engine.setPositionFromPGN(this.getPgn());
+
+            for (int i = 0; i < moves.size(); i++) {
+                String move = moves.get(i);
+                String color = (i % 2 == 0) ? "bianco" : "nero";
+
+                String analysis = engine.analyzePosition(depth);
+                String evaluation = parseEvaluation(analysis);
+                String bestMove = parseBestMove(analysis);
+
+                System.out.println("\nMossa " + (i + 1) + " (" + color + "): " + move);
+                System.out.println("Valutazione: " + evaluation);
+                System.out.println("Miglior mossa: " + bestMove);
+                System.out.println("Commento: " + generateComment(evaluation, move, bestMove));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Errore nell'analisi della partita: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Estrae la valutazione dalla risposta di Stockfish
+     */
+    private String parseEvaluation(String analysis) {
+        for (String line : analysis.split("\n")) {
+            if (line.contains("score cp ")) {
+                return line.split("score cp ")[1].split(" ")[0];
+            }
+        }
+        return "non disponibile";
+    }
+
+    /**
+     * Estrae la miglior mossa consigliata
+     */
+    private String parseBestMove(String analysis) {
+        for (String line : analysis.split("\n")) {
+            if (line.startsWith("bestmove")) {
+                return line.split(" ")[1];
+            }
+        }
+        return "non disponibile";
+    }
+
+    /**
+     * Genera un commento sulla qualità della mossa
+     */
+    private String generateComment(String evaluationStr, String playedMove, String bestMove) {
+        if (playedMove.equals(bestMove)) {
+            return "Mossa eccellente! Hai giocato la mossa migliore.";
+        } else {
+            return "Mossa migliorabile. Avresti dovuto giocare " + bestMove;
+        }
+    }
+
 
 }
