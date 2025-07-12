@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class ChessAnalyzer {
     public static final String STOCKFISH_PATH = "main/src/main/stockfish/stockfish";
-    public static final int ANALYSIS_DEPTH = 20;
+    public static final int ANALYSIS_DEPTH = 10;
 
     // Risorse per la comunicazione con Stockfish
     private Process stockfish;
@@ -73,17 +73,17 @@ public class ChessAnalyzer {
      * @throws IOException Se si verificano errori di I/O
      */
     private String getCurrentFen() throws IOException {
-        sendCommand("d"); //comando che permette di ottenere la situazione attuale
-
-        //Ricavo lo stato della scacchiera leggendo le righe che il comando 'd' ha generato
+        sendCommand("d");
         String line;
-        while ((line = reader.readLine()) != null) {
+        while ((line = readLineWithTimeout()) != null) {
             if (line.startsWith("Fen: ")) {
                 return line.substring(5);
             }
         }
         return "N/A";
     }
+
+
 
 
     /**
@@ -132,37 +132,53 @@ public class ChessAnalyzer {
         String currentFen = initialFen;
 
         for (String move : moves) {
-            // Determina il colore del giocatore
-            String playerColor = getPlayerColor(currentFen);
+            // Verifica mossa legale
+            List<String> legalMoves = getLegalMoves(currentFen);
+            if (!legalMoves.contains(move)) {
+                System.err.println("Mossa illegale rilevata: " + move);
+                continue;
+            }
 
-            // Ottieni il pezzo mosso e la mossa SAN
+            String playerColor = getPlayerColor(currentFen);
             String pieceMoved = getPieceMoved(currentFen, move);
             String sanMove = convertUciToSan(move, currentFen);
 
-            // Imposta la posizione corrente
+            // Analisi posizione
             sendCommand("position fen " + currentFen);
-
-            // Ottieni valutazione e mossa migliore
-            String bestMove = getBestMove();
+            String bestMove = getValidBestMove(currentFen);
             String score = getPositionScore();
 
-            // Crea il risultato
-            EvaluationResult result = new EvaluationResult(
+            results.add(new EvaluationResult(
                     score,
                     convertUciToSan(bestMove, currentFen),
                     pieceMoved,
                     playerColor,
                     sanMove
-            );
+            ));
 
-            results.add(result);
-
-            // Esegui la mossa
+            // Esegui mossa
             sendCommand("position fen " + currentFen + " moves " + move);
             currentFen = getCurrentFen();
         }
-
         return results;
+    }
+
+    private String getValidBestMove(String fen) throws IOException {
+        List<String> legalMoves = getLegalMoves(fen);
+        sendCommand("position fen " + fen);
+        sendCommand("go depth " + ANALYSIS_DEPTH);
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("bestmove")) {
+                String bestMove = line.split(" ")[1];
+                if (legalMoves.contains(bestMove)) {
+                    return bestMove;
+                }
+                return legalMoves.isEmpty() ? "N/A" : legalMoves.get(0);
+            }
+        }
+        return "N/A";
     }
 
     // Determina il colore del giocatore
@@ -216,29 +232,50 @@ public class ChessAnalyzer {
 
     // Ottieni il pezzo mosso
     private String getPieceMoved(String fen, String uciMove) {
-        // Estrai la casella di partenza (primi 2 caratteri)
-        String fromSquare = uciMove.substring(0, 2);
+        if (uciMove.length() < 2) return "Sconosciuto";
 
-        // Ottieni il carattere del pezzo dalla posizione
+        String fromSquare = uciMove.substring(0, 2);
         char pieceChar = getPieceAtSquare(fen, fromSquare);
 
-        // Converti in nome del pezzo
+        // Controllo speciale per pedoni
+        if (pieceChar == ' ' && uciMove.length() >= 4) {
+            // Potrebbe essere una promozione
+            if (uciMove.length() > 4) {
+                return switch (uciMove.charAt(4)) {
+                    case 'q' -> "Regina";
+                    case 'r' -> "Torre";
+                    case 'b' -> "Alfiere";
+                    case 'n' -> "Cavallo";
+                    default -> "Pedone";
+                };
+            }
+            return "Pedone";
+        }
         return getPieceName(pieceChar);
     }
 
     // Converti mossa UCI in SAN
     private String convertUciToSan(String uciMove, String fen) {
+        if (uciMove.equals("N/A")) return uciMove;
+
+        // Gestione mosse speciali
+        switch (uciMove) {
+            case "e1g1" -> { return "O-O"; }
+            case "e1c1" -> { return "O-O-O"; }
+            case "e8g8" -> { return "O-O"; }
+            case "e8c8" -> { return "O-O-O"; }
+        }
+
         Board board = new Board();
         board.loadFromFen(fen);
-        Move move = new Move(uciMove, board.getSideToMove());
-        return move.toString();
+        return new Move(uciMove, board.getSideToMove()).toString();
     }
 
     // Ottieni solo la mossa migliore
     private String getBestMove() throws IOException {
-        sendCommand("go depth " + Integer.toString(ANALYSIS_DEPTH));
+        sendCommand("go depth " + ANALYSIS_DEPTH);
         String line;
-        while ((line = reader.readLine()) != null) {
+        while ((line = readLineWithTimeout()) != null) {
             if (line.startsWith("bestmove")) {
                 return extractBestMove(line);
             }
@@ -313,7 +350,7 @@ public class ChessAnalyzer {
      */
     static class Move {
         private final String uci;
-        private boolean whiteMove;
+        private final boolean whiteMove;
 
         public Move(String uci, boolean whiteMove) {
             this.uci = uci;
@@ -322,10 +359,68 @@ public class ChessAnalyzer {
 
         @Override
         public String toString() {
-            // Implementazione base - nella realtà usare una libreria
-            String piece = getPieceName(uci.charAt(0));
-            return piece.charAt(0) + uci.substring(2, 4);
+            if (uci.length() < 4) return uci;
+
+            // Identifica il tipo di pezzo dal carattere iniziale
+            char pieceChar = uci.charAt(0);
+            String destination = uci.substring(2, 4);
+
+            if (pieceChar == ' ' || Character.toLowerCase(pieceChar) == 'p') {
+                // Mosse di pedone: solo destinazione (e4)
+                return destination;
+            }
+
+            // Converti il carattere del pezzo in notazione SAN
+            return switch (Character.toLowerCase(pieceChar)) {
+                case 'n' -> "N" + destination;
+                case 'b' -> "B" + destination;
+                case 'r' -> "R" + destination;
+                case 'q' -> "Q" + destination;
+                case 'k' -> "K" + destination;
+                default -> destination;
+            };
         }
+    }
+
+    private List<String> getLegalMoves(String fen) throws IOException {
+        clearInputBuffer(); // Aggiungi questo metodo prima
+        sendCommand("position fen " + fen);
+        sendCommand("go perft 1");
+
+        List<String> moves = new ArrayList<>();
+        String line;
+
+        while ((line = readLineWithTimeout()) != null) {
+            if (line.contains("Nodes searched")) break;
+
+            if (line.contains(": ") && !line.startsWith("info")) {
+                String move = line.split(":")[0].trim();
+                moves.add(move);
+            }
+        }
+        return moves;
+    }
+
+    // Aggiungi questo nuovo metodo
+    private void clearInputBuffer() throws IOException {
+        while (reader.ready()) {
+            reader.readLine();
+        }
+    }
+
+    private String readLineWithTimeout() throws IOException {
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < 3000) {
+            if (reader.ready()) {
+                return reader.readLine();
+            }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        return null;
     }
 
 
