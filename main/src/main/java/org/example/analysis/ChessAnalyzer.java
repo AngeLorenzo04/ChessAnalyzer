@@ -95,6 +95,8 @@ public class ChessAnalyzer {
         public String pieceMoved;  // Pezzo mosso (es. "Pedone", "Cavallo")
         public String playerColor; // Colore del giocatore che ha mosso ("Bianco" o "Nero")
         public String sanMove;     // Mossa in notazione SAN
+        public String comment;
+
 
         /**
          * Costruttore per il risultato dell'analisi.
@@ -110,12 +112,50 @@ public class ChessAnalyzer {
             this.pieceMoved = pieceMoved;
             this.playerColor = playerColor;
             this.sanMove = sanMove;
+            this.comment = GenerateComment(this.score);
         }
+
+        public String GenerateComment(String score){
+            StringBuilder comment = new StringBuilder();
+
+            if(Integer.parseInt(score.substring(3)) > 50){
+                comment.delete(0,comment.length());
+                comment.append("Geniale!! :0");
+            }
+            if(Integer.parseInt(score.substring(3)) <= 50){
+                comment.delete(0,comment.length());
+                comment.append("Migliore!! :0");
+            }
+            if(Integer.parseInt(score.substring(3)) < 40){
+                comment.delete(0,comment.length());
+                comment.append("Eccellente! :0");
+            }
+            if(Integer.parseInt(score.substring(3)) < 20){
+                comment.delete(0,comment.length());
+                comment.append("Buona :)");
+            }
+            if(Integer.parseInt(score.substring(3)) < -10){
+                comment.delete(0,comment.length());
+                comment.append("Impreciisione :|");
+            }
+            if(Integer.parseInt(score.substring(3)) < -150){
+                comment.delete(0,comment.length());
+                comment.append("Errore :(");
+            }
+            if(Integer.parseInt(score.substring(3)) < -150){
+                comment.delete(0,comment.length());
+                comment.append("Errore Grave 8==D");
+            }
+
+            return comment.toString();
+
+        }
+
 
         @Override
         public String toString() {
             return playerColor + " muove " + pieceMoved + " (" + sanMove + "): " +
-                    "Valutazione: " + score + " | Mossa migliore: " + bestMove;
+                    "Valutazione: " + score + " | Mossa migliore: " + bestMove + " comment: " + comment;
         }
     }
 
@@ -271,22 +311,9 @@ public class ChessAnalyzer {
         return new Move(uciMove, board.getSideToMove()).toString();
     }
 
-    // Ottieni solo la mossa migliore
-    private String getBestMove() throws IOException {
-        sendCommand("go depth " + ANALYSIS_DEPTH);
-        String line;
-        while ((line = readLineWithTimeout()) != null) {
-            if (line.startsWith("bestmove")) {
-                return extractBestMove(line);
-            }
-        }
-        return "N/A";
-    }
-
-
     // Ottieni solo il punteggio
     private String getPositionScore() throws IOException {
-        sendCommand("go depth " + Integer.toString(ANALYSIS_DEPTH));
+        sendCommand("go depth " + ANALYSIS_DEPTH);
         String line;
         while ((line = reader.readLine()) != null) {
             if (line.contains("bestmove")) break;
@@ -302,12 +329,10 @@ public class ChessAnalyzer {
      * (Nota: nella pratica sarebbe meglio usare una libreria dedicata)
      */
     static class Board {
-        private String fen;
         private final char[][] squares = new char[8][8];
         private boolean whiteToMove;
 
         public void loadFromFen(String fen) {
-            this.fen = fen;
             String[] parts = fen.split(" ");
             String[] rows = parts[0].split("/");
 
@@ -328,18 +353,6 @@ public class ChessAnalyzer {
             whiteToMove = parts[1].equals("w");
         }
 
-
-        /**
-         * Ottiene il pezzo in una specifica casella.
-         * @param square Casella in notazione algebrica (es. "e4")
-         * @return Carattere rappresentante il pezzo
-         */
-        public char getPieceAt(String square) {
-            int col = square.charAt(0) - 'a';
-            int row = 8 - Character.getNumericValue(square.charAt(1));
-            return squares[row][col];
-        }
-
         public boolean getSideToMove() {
             return whiteToMove;
         }
@@ -350,11 +363,9 @@ public class ChessAnalyzer {
      */
     static class Move {
         private final String uci;
-        private final boolean whiteMove;
 
         public Move(String uci, boolean whiteMove) {
             this.uci = uci;
-            this.whiteMove = whiteMove;
         }
 
         @Override
