@@ -4,7 +4,11 @@ import java.util.*;
 import java.util.regex.*;
 
 public class ConverterNotation {
-
+    /**
+     * Converte una partita in formato PGN in una lista di mosse UCI
+     * @param pgn La partita in formato PGN da convertire
+     * @return Lista di mosse in formato UCI
+     */
     public static List<String> convertPgnToUci(String pgn) {
         List<String> uciMoves = new ArrayList<>();
 
@@ -63,7 +67,12 @@ public class ConverterNotation {
 
         return uciMoves;
     }
-
+    /**
+     * Converte una mossa in notazione algebrica in formato UCI
+     * @param move La mossa in notazione algebrica
+     * @param state Lo stato corrente della scacchiera
+     * @return La mossa in formato UCI, o null se la conversione fallisce
+     */
     private static String convertAlgebraicMove(String move, BoardState state) {
         if (move.length() < 2) return null;
 
@@ -76,7 +85,9 @@ public class ConverterNotation {
             return state.findPieceSquare(pieceType, disamb, dest) + dest;
         }
     }
-
+    /**
+     * Inizializza una nuova scacchiera con la posizione iniziale standard
+     */
     static class BoardState {
         private Map<String, Character> board;
         private String turn;
@@ -105,7 +116,10 @@ public class ConverterNotation {
             board.put("d8", 'q'); board.put("e8", 'k'); board.put("f8", 'b');
             board.put("g8", 'n'); board.put("h8", 'r');
         }
-
+        /**
+         * Applica una mossa UCI alla scacchiera
+         * @param uci La mossa in formato UCI da applicare
+         */
         public void applyMove(String uci) {
             if (uci.length() < 4) return;
 
@@ -125,7 +139,11 @@ public class ConverterNotation {
             board.put(to, piece);
             turn = turn.equals("w") ? "b" : "w";
         }
-
+        /**
+         * Trova la mossa UCI corrispondente a una mossa di pedone
+         * @param move La mossa in notazione algebrica
+         * @return La mossa in formato UCI
+         */
         public String findPawnMove(String move) {
             if (move.length() < 2) return "0000";
 
@@ -164,7 +182,13 @@ public class ConverterNotation {
             return (turn.equals("w") && piece == 'P') ||
                     (turn.equals("b") && piece == 'p');
         }
-
+        /**
+         * Trova la posizione di partenza di un pezzo
+         * @param pieceType Il tipo di pezzo (es. 'N' per cavallo)
+         * @param disamb Stringa di disambiguazione (file o rank)
+         * @param dest Casella di destinazione
+         * @return La casella di partenza del pezzo
+         */
         public String findPieceSquare(char pieceType, String disamb, String dest) {
             char target = turn.equals("w") ? pieceType : Character.toLowerCase(pieceType);
 
@@ -173,22 +197,78 @@ public class ConverterNotation {
                 return findKnightSquare(target, dest, disamb);
             }
 
-            // Altri pezzi
+            // Lista di possibili candidati
+            List<String> candidates = new ArrayList<>();
+
+            // Cerca tutti i pezzi dello stesso tipo
             for (String square : board.keySet()) {
                 Character piece = board.get(square);
-                if (piece == null || piece != target) continue;
+                if (piece != null && piece == target) {
+                    candidates.add(square);
+                }
+            }
 
-                if (disamb.isEmpty()) {
-                    return square;
-                } else {
-                    if (square.contains(disamb)) {
-                        return square;
+            // Se c'è solo un candidato, restituiscilo
+            if (candidates.size() == 1) {
+                return candidates.get(0);
+            }
+
+            // Altrimenti, filtra per disambiguazione
+            if (!disamb.isEmpty()) {
+                Iterator<String> it = candidates.iterator();
+                while (it.hasNext()) {
+                    String candidate = it.next();
+                    if (!candidate.contains(disamb)) {
+                        it.remove();
                     }
                 }
             }
+
+            // Se ci sono ancora più candidati, scegli quello che può raggiungere la destinazione
+            if (!candidates.isEmpty()) {
+                for (String candidate : candidates) {
+                    if (canReach(candidate, dest, pieceType)) {
+                        return candidate;
+                    }
+                }
+            }
+
             return "00";
         }
 
+        private boolean canReach(String from, String to, char pieceType) {
+            char fileFrom = from.charAt(0);
+            int rankFrom = Character.getNumericValue(from.charAt(1));
+            char fileTo = to.charAt(0);
+            int rankTo = Character.getNumericValue(to.charAt(1));
+
+            int fileDiff = fileTo - fileFrom;
+            int rankDiff = rankTo - rankFrom;
+
+            // Alfieri si muovono in diagonale
+            if (Character.toUpperCase(pieceType) == 'B') {
+                return Math.abs(fileDiff) == Math.abs(rankDiff);
+            }
+            // Torri si muovono in linea retta
+            else if (Character.toUpperCase(pieceType) == 'R') {
+                return (fileDiff == 0 || rankDiff == 0);
+            }
+            // Regine si muovono come alfiere o torre
+            else if (Character.toUpperCase(pieceType) == 'Q') {
+                return (Math.abs(fileDiff) == Math.abs(rankDiff)) ||
+                        (fileDiff == 0 || rankDiff == 0);
+            }
+
+            return false;
+        }
+
+        /**
+         * Trova la posizione di partenza di un cavallo
+         * @param target Il tipo di cavallo ('N' o 'n')
+         * @param dest Casella di destinazione
+         * @param disamb Stringa di disambiguazione
+         * @return La casella di partenza del cavallo
+         */
         private String findKnightSquare(char target, String dest, String disamb) {
             List<String> candidates = new ArrayList<>();
             char destFile = dest.charAt(0);
@@ -229,27 +309,18 @@ public class ConverterNotation {
     public static void main(String[] args) {
         String pgn = "[Event \"Live Chess\"]\n" +
                 "[Site \"Chess.com\"]\n" +
-                "[Date \"2021.04.05\"]\n" +
+                "[Date \"2025.06.19\"]\n" +
                 "[Round \"-\"]\n" +
                 "[White \"y7876\"]\n" +
-                "[Black \"francesco_nutile\"]\n" +
-                "[Result \"0-1\"]\n" +
-                "[CurrentPosition \"rnbqkb1r/pppp1ppp/8/4p3/2P3nP/8/PP1PPP2/RNBQKBNR w KQkq -\"]\n" +
-                "[Timezone \"UTC\"]\n" +
-                "[ECO \"A20\"]\n" +
-                "[ECOUrl \"https://www.chess.com/openings/English-Opening-Kings-English-Variation\"]\n" +
-                "[UTCDate \"2021.04.05\"]\n" +
-                "[UTCTime \"10:38:18\"]\n" +
-                "[WhiteElo \"638\"]\n" +
-                "[BlackElo \"962\"]\n" +
+                "[Black \"Kazzakh2\"]\n" +
+                "[Result \"1-0\"]\n" +
+                "[WhiteElo \"357\"]\n" +
+                "[BlackElo \"335\"]\n" +
                 "[TimeControl \"600\"]\n" +
-                "[Termination \"francesco_nutile won by resignation\"]\n" +
-                "[StartTime \"10:38:18\"]\n" +
-                "[EndDate \"2021.04.05\"]\n" +
-                "[EndTime \"10:44:08\"]\n" +
-                "[Link \"https://www.chess.com/game/live/11358199965\"]\n\n" +
-                "1. c4 {[%clk 0:09:44]} 1... e5 {[%clk 0:09:58]} 2. g4 {[%clk 0:09:37.7]} 2... Nf6 {[%clk 0:09:54.3]} " +
-                "3. h4 {[%clk 0:09:15.1]} 3... Nxg4 {[%clk 0:09:51.3]} 0-1";
+                "[EndTime \"12:12:27 GMT+0000\"]\n" +
+                "[Termination \"y7876 ha vinto per abbandono\"]\n" +
+                "\n" +
+                "1. d4 d5 2. Nc3 Nf6 3. Nf3 e6 4. Bf4 Bd6 5. g3 Ne4 6. Nb5 c6 7. Nxd6+ 1-0";
 
         List<String> uciMoves = convertPgnToUci(pgn);
         System.out.println(uciMoves);
