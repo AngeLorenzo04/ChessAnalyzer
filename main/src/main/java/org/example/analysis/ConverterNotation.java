@@ -20,7 +20,7 @@ public class ConverterNotation {
         }
 
         String movesSection = pgn.substring(matcher.start());
-        movesSection = movesSection.replaceAll("\\{\\[%[^}]*\\}", "")
+        movesSection = movesSection.replaceAll("\\{\\[%[^}]*}", "")
                 .replaceAll("\\d+\\.\\.\\.", " ")
                 .replaceAll("\\d+\\.", " ")
                 .replaceAll("\\s+", " ")
@@ -104,8 +104,8 @@ public class ConverterNotation {
             board = new HashMap<>();
             // Pedoni
             for (char c = 'a'; c <= 'h'; c++) {
-                board.put("" + c + "2", 'P');
-                board.put("" + c + "7", 'p');
+                board.put(c + "2", 'P');
+                board.put(c + "7", 'p');
             }
             // Pezzi bianchi
             board.put("a1", 'R'); board.put("b1", 'N'); board.put("c1", 'B');
@@ -147,33 +147,52 @@ public class ConverterNotation {
         public String findPawnMove(String move) {
             if (move.length() < 2) return "0000";
 
-            char destFile = move.charAt(0);
-            int destRank = Character.getNumericValue(move.charAt(1));
-            int direction = turn.equals("w") ? -1 : 1;
-            int startRank = destRank + direction;
+            int destRank;
+            char destFile;
+            char departureFile = 0; // per cattura
+            boolean isCapture = (move.length() == 3);
 
-            // Caso base
-            String candidate = "" + destFile + startRank;
-            if (isPawnAt(candidate)) return candidate + destFile + destRank;
-
-            // Doppio passo iniziale
-            if (turn.equals("w") && destRank == 4) {
-                candidate = "" + destFile + "2";
-                if (isPawnAt(candidate)) return candidate + destFile + destRank;
-            }
-            else if (turn.equals("b") && destRank == 5) {
-                candidate = "" + destFile + "7";
-                if (isPawnAt(candidate)) return candidate + destFile + destRank;
+            if (isCapture) {
+                departureFile = move.charAt(0);
+                String dest = move.substring(1);
+                destFile = dest.charAt(0);
+                destRank = Character.getNumericValue(dest.charAt(1));
+            } else {
+                destFile = move.charAt(0);
+                destRank = Character.getNumericValue(move.charAt(1));
             }
 
-            // Catture
-            if (move.length() > 2 && move.charAt(1) == 'x') {
-                char sourceFile = move.charAt(0);
-                candidate = "" + sourceFile + startRank;
-                if (isPawnAt(candidate)) return candidate + destFile + destRank;
-            }
+            int startRankSingle = turn.equals("w") ? destRank - 1 : destRank + 1;
+            String candidate;
 
-            return "0000";
+            if (isCapture) {
+                candidate = "" + departureFile + startRankSingle;
+                if (isPawnAt(candidate)) {
+                    return candidate + destFile + destRank;
+                } else {
+                    return "0000"; // Casella non valida se il pedone non è presente
+                }
+            } else {
+                // Logica esistente per mosse non di cattura
+                candidate = "" + destFile + startRankSingle;
+                if (isPawnAt(candidate)) {
+                    return candidate + destFile + destRank;
+                }
+
+                // Doppio passo iniziale
+                if (turn.equals("w") && destRank == 4) {
+                    candidate = destFile + "2";
+                    if (isPawnAt(candidate)) {
+                        return candidate + destFile + destRank;
+                    }
+                } else if (turn.equals("b") && destRank == 5) {
+                    candidate = destFile + "7";
+                    if (isPawnAt(candidate)) {
+                        return candidate + destFile + destRank;
+                    }
+                }
+                return "0000";
+            }
         }
 
         private boolean isPawnAt(String square) {
@@ -215,13 +234,7 @@ public class ConverterNotation {
 
             // Altrimenti, filtra per disambiguazione
             if (!disamb.isEmpty()) {
-                Iterator<String> it = candidates.iterator();
-                while (it.hasNext()) {
-                    String candidate = it.next();
-                    if (!candidate.contains(disamb)) {
-                        it.remove();
-                    }
-                }
+                candidates.removeIf(candidate -> !candidate.contains(disamb));
             }
 
             // Se ci sono ancora più candidati, scegli quello che può raggiungere la destinazione
@@ -290,13 +303,7 @@ public class ConverterNotation {
 
             // Filtra con disambiguazione
             if (!disamb.isEmpty()) {
-                Iterator<String> it = candidates.iterator();
-                while (it.hasNext()) {
-                    String candidate = it.next();
-                    if (!candidate.contains(disamb)) {
-                        it.remove();
-                    }
-                }
+                candidates.removeIf(candidate -> !candidate.contains(disamb));
             }
 
             if (!candidates.isEmpty()) {
@@ -307,20 +314,21 @@ public class ConverterNotation {
     }
 
     public static void main(String[] args) {
-        String pgn = "[Event \"Live Chess\"]\n" +
-                "[Site \"Chess.com\"]\n" +
-                "[Date \"2025.06.19\"]\n" +
-                "[Round \"-\"]\n" +
-                "[White \"y7876\"]\n" +
-                "[Black \"Kazzakh2\"]\n" +
-                "[Result \"1-0\"]\n" +
-                "[WhiteElo \"357\"]\n" +
-                "[BlackElo \"335\"]\n" +
-                "[TimeControl \"600\"]\n" +
-                "[EndTime \"12:12:27 GMT+0000\"]\n" +
-                "[Termination \"y7876 ha vinto per abbandono\"]\n" +
-                "\n" +
-                "1. d4 d5 2. Nc3 Nf6 3. Nf3 e6 4. Bf4 Bd6 5. g3 Ne4 6. Nb5 c6 7. Nxd6+ 1-0";
+        String pgn = """
+                [Event "Live Chess"]
+                [Site "Chess.com"]
+                [Date "2025.06.19"]
+                [Round "-"]
+                [White "y7876"]
+                [Black "Kazzakh2"]
+                [Result "1-0"]
+                [WhiteElo "357"]
+                [BlackElo "335"]
+                [TimeControl "600"]
+                [EndTime "12:12:27 GMT+0000"]
+                [Termination "y7876 ha vinto per abbandono"]
+                
+                1. d4 d5 2. Nc3 Nf6 3. Nf3 e6 4. Bf4 Bd6 5. g3 Ne4 6. Nb5 c6 7. Nxd6+ 1-0""";
 
         List<String> uciMoves = convertPgnToUci(pgn);
         System.out.println(uciMoves);
