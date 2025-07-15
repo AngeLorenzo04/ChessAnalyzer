@@ -38,15 +38,6 @@ public class ChessAnalyzer {
     }
 
     /**
-     * Termina correttamente il processo Stockfish.
-     * @throws IOException Se si verificano errori di I/O
-     */
-    public void stopStockfish() throws IOException {
-        sendCommand("quit");
-        stockfish.destroy();
-    }
-
-    /**
      * Invia un comando a Stockfish.
      * @param command Il comando da inviare
      * @throws IOException Se si verificano errori di I/O
@@ -181,8 +172,8 @@ public class ChessAnalyzer {
             // Verifica mossa legale
             List<String> legalMoves = getLegalMoves(currentFen);
             if (!legalMoves.contains(move)) {
-                System.err.println("Mossa illegale rilevata: " + move);
-                continue;
+                System.err.println("Mossa non riconosciuta: " + move);
+                continue;  // Salta mosse non valide
             }
 
             String playerColor = getPlayerColor(currentFen);

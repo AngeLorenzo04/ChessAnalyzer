@@ -7,8 +7,6 @@ package org.example.utils;
  */
 public class Board {
     private final char[][] squares = new char[8][8];
-    private boolean whiteToMove;
-
     /**
      * Carica una posizione dalla notazione FEN.
      *
@@ -31,16 +29,6 @@ public class Board {
                 }
             }
         }
-        whiteToMove = parts[1].equals("w");
+        boolean whiteToMove = parts[1].equals("w");
     }
-
-    /**
-     * Verifica a chi spetta il turno.
-     *
-     * @return true se è il turno del bianco, false altrimenti
-     */
-    public boolean isWhiteToMove() {
-        return whiteToMove;
-    }
-
 }
