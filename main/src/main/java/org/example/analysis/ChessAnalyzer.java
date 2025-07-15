@@ -1,8 +1,14 @@
 package org.example.analysis;
 
 
+import org.example.utils.Board;
+
 import java.io.*;
 import java.util.*;
+
+import static org.example.utils.ChessUtils.getPieceName;
+import static org.example.utils.FenUtils.getPieceAtSquare;
+import static org.example.utils.FenUtils.getPlayerColor;
 
 /**
  * Classe per analizzare partite di scacchi utilizzando il motore Stockfish.
@@ -221,55 +227,6 @@ public class ChessAnalyzer {
         return "N/A";
     }
 
-    // Determina il colore del giocatore
-    private String getPlayerColor(String fen) {
-        // Il secondo campo nel FEN indica il turno
-        String[] parts = fen.split(" ");
-        return parts[1].equals("w") ? "Bianco" : "Nero";
-    }
-
-    // Ottieni il carattere del pezzo in una casella
-    private char getPieceAtSquare(String fen, String square) {
-        // Estrai la parte della posizione dal FEN (prima parte prima dello spazio)
-        String positionPart = fen.split(" ")[0];
-        String[] rows = positionPart.split("/");
-
-        // Converti la notazione della casella (es. "e4") in indici di riga e colonna
-        int col = square.charAt(0) - 'a'; // 0-7
-        int row = 8 - Character.getNumericValue(square.charAt(1)); // 0-7
-
-        // Scorri la riga per trovare il pezzo
-        String fenRow = rows[row];
-        int currentCol = 0;
-
-        for (char c : fenRow.toCharArray()) {
-            if (Character.isDigit(c)) {
-                // Se è un numero, salta quelle caselle vuote
-                currentCol += Character.getNumericValue(c);
-            } else {
-                if (currentCol == col) {
-                    return c; // Trovato il pezzo
-                }
-                currentCol++;
-            }
-        }
-
-        return ' '; // Casella vuota
-    }
-
-    // Converti carattere pezzo in nome
-    private static String getPieceName(char pieceChar) {
-        return switch (Character.toLowerCase(pieceChar)) {
-            case 'p' -> "Pedone";
-            case 'n' -> "Cavallo";
-            case 'b' -> "Alfiere";
-            case 'r' -> "Torre";
-            case 'q' -> "Regina";
-            case 'k' -> "Re";
-            default -> "Sconosciuto";
-        };
-    }
-
     // Ottieni il pezzo mosso
     private String getPieceMoved(String fen, String uciMove) {
         if (uciMove.length() < 2) return "Sconosciuto";
@@ -300,15 +257,13 @@ public class ChessAnalyzer {
 
         // Gestione mosse speciali
         switch (uciMove) {
-            case "e1g1" -> { return "O-O"; }
-            case "e1c1" -> { return "O-O-O"; }
-            case "e8g8" -> { return "O-O"; }
-            case "e8c8" -> { return "O-O-O"; }
+            case "e1g1", "e8g8" -> { return "O-O"; }
+            case "e1c1", "e8c8" -> { return "O-O-O"; }
         }
 
         Board board = new Board();
         board.loadFromFen(fen);
-        return new Move(uciMove, board.getSideToMove()).toString();
+        return new Move(uciMove).toString();
     }
 
     // Ottieni solo il punteggio
@@ -325,46 +280,12 @@ public class ChessAnalyzer {
     }
 
     /**
-     * Classe interna per rappresentare una scacchiera semplificata.
-     * (Nota: nella pratica sarebbe meglio usare una libreria dedicata)
-     */
-    static class Board {
-        private final char[][] squares = new char[8][8];
-        private boolean whiteToMove;
-
-        public void loadFromFen(String fen) {
-            String[] parts = fen.split(" ");
-            String[] rows = parts[0].split("/");
-
-            // Inizializza la scacchiera
-            for (int i = 0; i < 8; i++) {
-                int col = 0;
-                for (char c : rows[i].toCharArray()) {
-                    if (Character.isDigit(c)) {
-                        int empty = Character.getNumericValue(c);
-                        for (int j = 0; j < empty; j++) {
-                            squares[i][col++] = ' ';
-                        }
-                    } else {
-                        squares[i][col++] = c;
-                    }
-                }
-            }
-            whiteToMove = parts[1].equals("w");
-        }
-
-        public boolean getSideToMove() {
-            return whiteToMove;
-        }
-    }
-
-    /**
      * Classe interna per rappresentare una mossa semplificata.
      */
     static class Move {
         private final String uci;
 
-        public Move(String uci, boolean whiteMove) {
+        public Move(String uci) {
             this.uci = uci;
         }
 
@@ -432,16 +353,6 @@ public class ChessAnalyzer {
             }
         }
         return null;
-    }
-
-
-    // Estrai la mossa migliore
-    private String extractBestMove(String line) {
-        String[] parts = line.split(" ");
-        if (parts.length >= 2) {
-            return parts[1];  // Formato UCI (es. "e2e4")
-        }
-        return "N/A";
     }
 
 }
