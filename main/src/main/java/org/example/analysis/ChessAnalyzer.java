@@ -113,39 +113,48 @@ public class ChessAnalyzer {
         }
 
         public String GenerateComment(String score){
-            StringBuilder comment = new StringBuilder();
+            // Pulisce la stringa da eventuali spazi
+            score = score.trim();
 
-            if(Integer.parseInt(score.substring(3)) > 50){
-                comment.delete(0,comment.length());
-                comment.append("Geniale!! :0");
-            }
-            if(Integer.parseInt(score.substring(3)) <= 50){
-                comment.delete(0,comment.length());
-                comment.append("Migliore!! :0");
-            }
-            if(Integer.parseInt(score.substring(3)) < 40){
-                comment.delete(0,comment.length());
-                comment.append("Eccellente! :0");
-            }
-            if(Integer.parseInt(score.substring(3)) < 20){
-                comment.delete(0,comment.length());
-                comment.append("Buona :)");
-            }
-            if(Integer.parseInt(score.substring(3)) < -10){
-                comment.delete(0,comment.length());
-                comment.append("Impreciisione :|");
-            }
-            if(Integer.parseInt(score.substring(3)) < -150){
-                comment.delete(0,comment.length());
-                comment.append("Errore :(");
-            }
-            if(Integer.parseInt(score.substring(3)) < -150){
-                comment.delete(0,comment.length());
-                comment.append("Errore Grave 8==D");
-            }
+            if (score.startsWith("mate") || score.startsWith("#")) {
+                // Gestione del matto
+                String numero = score.replaceAll("[^0-9-]", ""); // Estrae il numero
+                int mateIn = Integer.parseInt(numero);
 
-            return comment.toString();
+                if (mateIn > 0) {
+                    return "Matto in " + mateIn + " mosse. Vittoria forzata in vista!";
+                } else {
+                    return "Stai per essere matto in " + Math.abs(mateIn) + " mosse! Cerca una difesa disperata.";
+                }
 
+            } else if (score.startsWith("cp") || score.matches("[0-9.]+")) {
+                // Gestione delle valutazioni centipawn
+                double punteggio;
+                try {
+                    punteggio = Double.parseDouble(score.substring(3));
+                } catch (NumberFormatException e) {
+                    return "Valutazione non valida.";
+                }
+
+                if (punteggio > 3.0) {
+                    return "Grande vantaggio per il Bianco.";
+                } else if (punteggio > 1.0) {
+                    return "Chiaro vantaggio per il Bianco.";
+                } else if (punteggio > 0.3) {
+                    return "Lieve vantaggio per il Bianco.";
+                } else if (punteggio > -0.3) {
+                    return "Posizione equilibrata.";
+                } else if (punteggio > -1.0) {
+                    return "Lieve vantaggio per il Nero.";
+                } else if (punteggio > -3.0) {
+                    return "Chiaro vantaggio per il Nero.";
+                } else {
+                    return "Grande vantaggio per il Nero.";
+                }
+
+            } else {
+                return "Formato di valutazione non riconosciuto.";
+            }
         }
 
 
