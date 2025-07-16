@@ -20,6 +20,7 @@ public class PgnToUciConverter {
         // 3. Configura il processo con timeout
         ProcessBuilder pb = new ProcessBuilder(
                 "pgn-extract",
+                "-s",
                 "-Wuci",
                 "-o", outputFile.getAbsolutePath(),
                 inputFile.getAbsolutePath()
@@ -83,13 +84,7 @@ public class PgnToUciConverter {
     }
 
     public static void main(String[] args) {
-        String pgn = "1. e4 e6 2. Nf3 d5 3. exd5 exd5 4. d4 Nf6 5. Bg5 Be7 6. c4 c5 7. cxd5 cxd4 8. " +
-                "Qxd4 Nxd5 9. Qxg7 Rf8 10. Bxe7 Nxe7 11. Bb5+ Bd7 12. Bxd7+ Nxd7 13. Nc3 Nf5 14. " +
-                "Qxh7 Qe7+ 15. Ne2 O-O-O 16. O-O Rh8 17. Qxf5 Kb8 18. Nc3 f6 19. Nd5 Qh7 20. Qf4+ " +
-                "Ne5 21. Nxf6 Qh6 22. Qxe5+ Ka8 23. Rfd1 Rdf8 24. Ng4 Qb6 25. b3 a5 26. Rd6 Re8 " +
-                "27. Rxb6 Rxe5 28. Nfxe5 Ka7 29. Rb5 Ka6 30. Rc5 Kb6 31. Rac1 Rd8 32. Nc4+ Kxc5 " +
-                "33. Nxa5+ Kb4 34. Nxb7 Rd7 35. Nc5 Rc7 36. Nd3+ Ka3 37. Rxc7 Kxa2 38. h4 Kxb3 " +
-                "39. h5 1-0";
+        String pgn = "1. e4 e6 2. Nf3 d5 3. exd5 exd5 4. d4 Nf6 5. Bg5 Be7 6. c4 c5 7. cxd5 cxd4 8. Qxd4 Nxd5 9. Qxg7 Rf8 10. Bxe7 Nxe7 11. Bb5+ Bd7 12. Bxd7+ Nxd7 13. Nc3 Nf5 14. Qxh7 Qe7+ 15. Ne2 O-O-O 16. O-O Rh8 17. Qxf5 Kb8 18. Nc3 f6 19. Nd5 Qh7 20. Qf4+Ne5 21. Nxf6 Qh6 22. Qxe5+ Ka8 23. Rfd1 Rdf8 24. Ng4 Qb6 25. b3 a5 26. Rd6 Re827. Rxb6 Rxe5 28. Nfxe5 Ka7 29. Rb5 Ka6 30. Rc5 Kb6 31. Rac1 Rd8 32. Nc4+ Kxc533. Nxa5+ Kb4 34. Nxb7 Rd7 35. Nc5 Rc7 36. Nd3+ Ka3 37. Rxc7 Kxa2 38. h4 Kxb3 39. h5 1-0";
 
         try {
             List<String> uciMoves = PgnToUciConverter.convertPgnToUci(pgn);

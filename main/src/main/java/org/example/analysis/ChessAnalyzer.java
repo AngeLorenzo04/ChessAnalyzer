@@ -18,8 +18,6 @@ public class ChessAnalyzer {
     public static final String STOCKFISH_PATH = "main/src/main/stockfish/stockfish";
     public static final int ANALYSIS_DEPTH = 10;
 
-    // Risorse per la comunicazione con Stockfish
-    private Process stockfish;
     private OutputStreamWriter writer;
     private BufferedReader reader;
 
@@ -28,7 +26,8 @@ public class ChessAnalyzer {
      * @throws IOException Se si verificano errori di I/O
      */
     public void startStockfish() throws IOException {
-        stockfish = new ProcessBuilder(STOCKFISH_PATH).start();
+        // Risorse per la comunicazione con Stockfish
+        Process stockfish = new ProcessBuilder(STOCKFISH_PATH).start();
         writer = new OutputStreamWriter(stockfish.getOutputStream());
         reader = new BufferedReader(new InputStreamReader(stockfish.getInputStream()));
 
@@ -79,9 +78,6 @@ public class ChessAnalyzer {
         }
         return "N/A";
     }
-
-
-
 
     /**
      * Classe interna per contenere i risultati dell'analisi.
