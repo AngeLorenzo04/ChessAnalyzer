@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ChessPGNDownloader {
+public class ApiUtils {
 
     public static void main(String[] args) {
         ChessAPIService apiService = new ChessAPIService();
