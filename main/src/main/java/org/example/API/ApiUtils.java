@@ -1,6 +1,7 @@
 package org.example.API;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,18 +13,13 @@ public class ApiUtils {
         ChessCLI cli = new ChessCLI();
 
         try {
-            String username = cli.promptUsername();
-            String archivesJson = apiService.getGameArchives(username);
-            List<ChessArchive> archives = dataParser.parseArchives(archivesJson);
-
-            ChessArchive selectedArchive = cli.selectArchive(archives);
-            String gamesJson = apiService.getGamesFromArchive(selectedArchive.getUrl());
+            CompletableFuture<ChessArchive> selectedArchive = cli.selectArchive();
+            String gamesJson = apiService.getGamesFromArchive(selectedArchive.get().getUrl());
             List<ChessGame> games = dataParser.parseGames(gamesJson);
 
-            ChessGame selectedGame = cli.selectGame(games);
-            cli.displayPGN(selectedGame.getPgn());
+            cli.displayPGN();
         } catch (Exception e) {
-            cli.displayError(e.getMessage());
+            cli.displayError();
         }
     }
 }

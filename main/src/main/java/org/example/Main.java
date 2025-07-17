@@ -20,14 +20,14 @@ public class Main {
         ChessAnalyzer analyzer = new ChessAnalyzer();
 
         try{
-             String name = cli.promptUsername();
+             String name = cli.promptUsername().get();
              String archiveJSON = apiService.getGameArchives(name);
              List<ChessArchive> archiveList = dataParser.parseArchives(archiveJSON);
-             ChessArchive archivioSelezionato = cli.selectArchive(archiveList);
+             ChessArchive archivioSelezionato = cli.selectArchive().get();
 
              String gamesJSON = apiService.getGamesFromArchive(archivioSelezionato.getUrl());
              List<ChessGame> games = dataParser.parseGames(gamesJSON);
-             ChessGame game = cli.selectGame(games);
+             ChessGame game = cli.selectGame().get();
 
              String movesPGN = game.getPgn();
              String cleanMovesPGN = PgnUtils.cleanForCompactFormat(movesPGN);

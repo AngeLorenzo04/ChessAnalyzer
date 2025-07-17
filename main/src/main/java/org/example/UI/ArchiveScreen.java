@@ -6,7 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.example.API.ChessArchive;
-
+import java.io.IOException;
 import java.util.List;
 
 public class ArchiveScreen extends VBox {
@@ -24,14 +24,16 @@ public class ArchiveScreen extends VBox {
         nextButton.setOnAction(e -> {
             ChessArchive selected = archiveCombo.getValue();
             if (selected != null) {
-                controller.showGameScreen(selected);
+                try {
+                    controller.showGameScreen(selected);
+                } catch (IOException | InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
         Button backButton = new Button("Indietro");
-        backButton.setOnAction(e -> {
-            controller.showUsernameScreen();
-        });
+        backButton.setOnAction(e -> controller.showUsernameScreen());
 
         getChildren().addAll(label, archiveCombo, nextButton,backButton);
     }
