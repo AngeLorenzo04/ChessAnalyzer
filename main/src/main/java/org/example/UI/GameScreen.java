@@ -35,7 +35,13 @@ public class GameScreen extends VBox {
             }
         });
 
-        getChildren().addAll(label, gameCombo, nextButton);
+        Button backToNameButton = new Button("Torna alla scelta del nome");
+        backToNameButton.setOnAction(e -> controller.showUsernameScreen());
+
+        Button backToArhchivie = new Button("Torna alla scelta del archivio");
+        backToNameButton.setOnAction(e -> controller.showUsernameScreen());
+
+        getChildren().addAll(label, gameCombo, nextButton,backToNameButton, backToArhchivie);
     }
 
     private static class GameStringConverter extends StringConverter<ChessGame> {
