@@ -84,8 +84,7 @@ public class PgnToUciConverter {
     }
 
     public static void main(String[] args) {
-        String pgn = "1. e4 e6 2. Nf3 d5 3. exd5 exd5 4. d4 Nf6 5. Bg5 Be7 6. c4 c5 7. cxd5 cxd4 8. Qxd4 Nxd5 9. Qxg7 Rf8 10. Bxe7 Nxe7 11. Bb5+ Bd7 12. Bxd7+ Nxd7 13. Nc3 Nf5 14. Qxh7 Qe7+ 15. Ne2 O-O-O 16. O-O Rh8 17. Qxf5 Kb8 18. Nc3 f6 19. Nd5 Qh7 20. Qf4+Ne5 21. Nxf6 Qh6 22. Qxe5+ Ka8 23. Rfd1 Rdf8 24. Ng4 Qb6 25. b3 a5 26. Rd6 Re827. Rxb6 Rxe5 28. Nfxe5 Ka7 29. Rb5 Ka6 30. Rc5 Kb6 31. Rac1 Rd8 32. Nc4+ Kxc533. Nxa5+ Kb4 34. Nxb7 Rd7 35. Nc5 Rc7 36. Nd3+ Ka3 37. Rxc7 Kxa2 38. h4 Kxb3 39. h5 1-0";
-
+        String pgn  = "1. e4 1... d5 2. d3 2... e6 3. d4 3... Bb4+ 4. Bd2 4... Qg5 5. Bb5+ 5... c6 6. Bxb4 6... Nf6 7. Bd2 7... dxe4 8. Bxg5 8... h6 9. Bxf6 9... gxf6 10. Nc3 10... e5 11. Nxe4 11... exd4 12. Qxd4 12... f5 13. Nf6+ 13... Ke7 14. Nh5 14... Rd8 15. Qf6+ 15... Kf8 16. Qxd8# 1-0";
         try {
             List<String> uciMoves = PgnToUciConverter.convertPgnToUci(pgn);
             System.out.println("Mosse convertite (" + uciMoves.size() + "):");

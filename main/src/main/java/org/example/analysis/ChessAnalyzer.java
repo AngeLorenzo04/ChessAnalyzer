@@ -311,7 +311,7 @@ public class ChessAnalyzer {
     }
 
     private List<String> getLegalMoves(String fen) throws IOException {
-        clearInputBuffer(); // Aggiungi questo metodo prima
+        clearInputBuffer();
         sendCommand("position fen " + fen);
         sendCommand("go perft 1");
 
@@ -329,7 +329,6 @@ public class ChessAnalyzer {
         return moves;
     }
 
-    // Aggiungi questo nuovo metodo
     private void clearInputBuffer() throws IOException {
         while (reader.ready()) {
             reader.readLine();
@@ -349,6 +348,51 @@ public class ChessAnalyzer {
             }
         }
         return null;
+    }
+
+
+    public static void main(String[] args) {
+        ChessAnalyzer analyzer = new ChessAnalyzer();
+
+        try {
+            // Avvia il motore Stockfish
+            analyzer.startStockfish();
+            System.out.println("Stockfish avviato correttamente");
+
+            // FEN iniziale (posizione standard)
+            String initialFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+            // Sequenza di mosse da analizzare (in formato UCI)
+            List<String> moves = Arrays.asList(
+                    "e2e4",  // Pedone bianco avanza
+                    "e7e5",  // Pedone nero avanza
+                    "g1f3",  // Cavallo bianco
+                    "b8c6",  // Cavallo nero
+                    "f1c4",  // Alfiere bianco
+                    "f8c5",  // Alfiere nero
+                    "e1g1",  // Arrocco corto bianco
+                    "e8g8"   // Arrocco corto nero
+            );
+
+            System.out.println("Analisi della partita in corso...");
+            System.out.println("----------------------------------");
+
+            // Analizza la sequenza di mosse
+            List<ChessAnalyzer.EvaluationResult> results = analyzer.analyzeMoves(initialFen, moves);
+
+            // Stampa i risultati
+            for (ChessAnalyzer.EvaluationResult result : results) {
+                System.out.println(result);
+                System.out.println("----------------------------------");
+            }
+
+        } catch (IOException e) {
+            System.err.println("Errore durante l'analisi: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Errore generico: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }
