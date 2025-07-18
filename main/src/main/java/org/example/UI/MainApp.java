@@ -1,46 +1,77 @@
-package org.example.UI;// ChessFXApp.java
+package org.example.UI;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.example.API.ChessCLI;
+import org.example.UI.controllers.Scene1Controller;
+import org.example.UI.controllers.Scene2Controller;
+import org.example.UI.controllers.Scene3Controller;
+import org.example.UI.controllers.Scene4Controller;
 
-import java.net.URL;
-import java.util.Objects;
+import java.io.IOException;
 
 public class MainApp extends Application {
 
-//    @Override
-//    public void start(Stage primaryStage) {
-//        ChessCLI cli = new ChessCLI();
-//        NavigationController navigationController = new NavigationController(primaryStage,cli);
-//        navigationController.showUsernameScreen();
-//        primaryStage.setTitle("Chess Analyzer");
-//        primaryStage.show();
-//    }
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
-@Override
-public void start(Stage primaryStage) {
-    ChessCLI chessCLI = new ChessCLI();
-    NavigationController navController = new NavigationController(primaryStage, chessCLI);
+    private Stage primaryStage;
 
-    // Initialize with empty scene
-    StackPane root = new StackPane();
-    Scene scene = new Scene(root, 800, 600);
-    primaryStage.setScene(scene);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Applicazione Multi-Scena");
+        showScene1();
+    }
 
-    navController.showUsernameScreen();
-    primaryStage.setTitle("Chess Analyzer");
-    primaryStage.show();
-}
+    public void showScene1() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene1.fxml"));
+            Parent root = loader.load();
+
+            Scene1Controller controller = loader.getController();
+            controller.setMainApp(this);
+
+            primaryStage.setScene(new Scene(root, 600, 400));
+            primaryStage.show();
+        } catch (IOException ignore) {}
+    }
+
+    public void showScene2(String userName) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene2.fxml"));
+            Parent root = loader.load();
+
+            Scene2Controller controller = loader.getController();
+            controller.initData(this, userName); // Passa sia mainApp che userName
+
+            primaryStage.getScene().setRoot(root);
+        } catch (IOException ignore) {}
+    }
+
+    public void showScene3() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene3.fxml"));
+            Parent root = loader.load();
+
+            Scene3Controller controller = loader.getController();
+            controller.setMainApp(this);
+
+            primaryStage.getScene().setRoot(root);
+        } catch (IOException ignore) {}
+    }
+
+    public void showScene4() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene4.fxml"));
+        Parent root = loader.load();
+
+        Scene4Controller controller = loader.getController();
+        controller.setMainApp(this);
+
+        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.show();
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
-
 }

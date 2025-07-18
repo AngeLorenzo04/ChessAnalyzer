@@ -1,0 +1,26 @@
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.UI.controllers.Scene2Controller"
+      stylesheets="@style.css"
+      styleClass="scene-2 scene-container"
+      spacing="15" alignment="CENTER">
+
+    <Text text="Seleziona un archivio" styleClass="scene-title"/>
+
+    <Label fx:id="userNameLabel" styleClass="user-label"/>
+
+    <Label text="Archivio disponibile:" styleClass="subtitle"/>
+    <ComboBox fx:id="archiveComboBox" styleClass="transition-all interactive"
+              promptText="Seleziona un archivio"/>
+
+    <HBox styleClass="nav-buttons">
+        <Button text="Indietro" styleClass="button-secondary transition-all" onAction="#navigateToPreviusScene"/>
+        <Button text="Avanti" fx:id="nextButton" styleClass="transition-all" disable="true"/>
+    </HBox>
+</VBox>

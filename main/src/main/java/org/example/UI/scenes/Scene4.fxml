@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.UI.controllers.Scene4Controller"
+      stylesheets="@style.css"
+      styleClass="scene-4 scene-container"
+      spacing="20" alignment="CENTER">
+
+    <Text text="Note finali" styleClass="scene-title"/>
+
+    <Label text="Inserisci le tue note:" />
+    <TextArea fx:id="notesTextArea" promptText="Scrivi qui le tue osservazioni..." styleClass="transition-all interactive"/>
+
+    <HBox styleClass="nav-buttons">
+        <Button text="Indietro" fx:id="backButton" styleClass="button-secondary transition-all"/>
+        <Button text="Conferma" fx:id="confirmButton" styleClass="transition-all"/>
+    </HBox>
+</VBox>

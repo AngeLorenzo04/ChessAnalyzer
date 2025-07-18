@@ -43,6 +43,7 @@
             <resource>
                 <directory>src/main/java/org/example/UI/scenes</directory>
                 <includes>
+                    <include>*</include>
                     <include>**/*.fxml</include>
                     <include>**/*.css</include>
                 </includes>

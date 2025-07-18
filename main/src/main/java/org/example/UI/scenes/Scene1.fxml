@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.UI.controllers.Scene1Controller"
+      stylesheets="@style.css"
+      styleClass="scene-1 scene-container"
+      spacing="15" alignment="CENTER">
+
+    <Text text="Inserisci il tuo nome" styleClass="scene-title"/>
+
+    <Label text="Nome utente:" />
+    <TextField fx:id="nameField" promptText="Mario Rossi" styleClass="transition-all interactive"
+               onAction="#handleEnterKey" />
+
+    <HBox styleClass="nav-buttons">
+        <Button text="Avanti" fx:id="nextButton" styleClass="transition-all"
+                defaultButton="true" />
+    </HBox>
+</VBox>
