@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import org.example.API.ChessGame;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +18,7 @@ public class GameScreen extends VBox {
     private static final DateTimeFormatter DATE_FORMATTER =
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").withZone(ZoneId.systemDefault());
 
-    public GameScreen(NavigationController controller, List<ChessGame> games) {
+    public GameScreen(NavigationController controller, List<ChessGame> games, String name) {
         setSpacing(10);
         setPadding(new Insets(15));
 
@@ -36,10 +37,18 @@ public class GameScreen extends VBox {
         });
 
         Button backToNameButton = new Button("Torna alla scelta del nome");
-        backToNameButton.setOnAction(e -> controller.showUsernameScreen());
+        backToNameButton.setOnAction(e -> {
+            controller.showUsernameScreen();
+        });
 
         Button backToArhchivie = new Button("Torna alla scelta del archivio");
-        backToNameButton.setOnAction(e -> controller.showUsernameScreen());
+        backToNameButton.setOnAction(e -> {
+            try {
+                controller.showArchiveScreen(name);
+            } catch (IOException | InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         getChildren().addAll(label, gameCombo, nextButton,backToNameButton, backToArhchivie);
     }

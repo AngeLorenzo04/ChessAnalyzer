@@ -1,4 +1,4 @@
-package org.example.UI;// ArchiveStringConverter.java
+package org.example.UI.stringConverter;// ArchiveStringConverter.java
 import javafx.util.StringConverter;
 import org.example.API.ChessArchive;
 
@@ -9,7 +9,9 @@ public class ArchiveStringConverter extends StringConverter<ChessArchive> {
     }
 
     @Override
-    public ChessArchive fromString(String string) {
+    public ChessArchive fromString(String s) {
         return null;
     }
+
+
 }

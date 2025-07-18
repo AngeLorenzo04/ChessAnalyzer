@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.UI.ArchiveScreenController"
+      spacing="10"
+      style="-fx-background-color: #f0f0f0;">
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <Label fx:id="usernameLabel" text="Seleziona un archivio per..."
+           style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+
+    <ComboBox fx:id="archiveCombo" prefWidth="300"
+              style="-fx-font-size: 13px; -fx-background-radius: 4px;"/>
+
+    <Button fx:id="nextButton" text="Avanti"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+            onAction="#handleNextButton"/>
+
+    <Button fx:id="backButton" text="Indietro"
+            style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold;"
+            onAction="#handleBackButton"/>
+</VBox>

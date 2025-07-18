@@ -11,7 +11,7 @@ public class ChessAPIService {
     private final HttpClient httpClient = HttpClient.newHttpClient();
 
     public String getGameArchives(String username) throws IOException, InterruptedException {
-        String apiUrl = BASE_URL + username + "/games/archives";
+        String apiUrl = BASE_URL + username.toLowerCase() + "/games/archives";
         return sendGetRequest(apiUrl);
     }
 
