@@ -1,11 +1,15 @@
 package org.example.UI.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import org.example.API.ChessAPIService;
+import org.example.API.ChessArchive;
+import org.example.API.ChessDataParser;
+import org.example.API.ChessGame;
 import org.example.UI.MainApp;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Scene3Controller {
 
@@ -14,27 +18,37 @@ public class Scene3Controller {
     @FXML
     private ComboBox<String> matchComboBox;
 
-    @FXML
-    private Button nextButton;
+    private ChessArchive archivio;
 
-    @FXML
-    private void initialize() {
+    private List<ChessGame> parite;
+
+
+    private void updateUI() throws IOException, InterruptedException {
         // Esempio: popolare la ComboBox con alcune partite
-        matchComboBox.getItems().addAll("Partita A", "Partita B", "Partita C");
 
-        nextButton.setOnAction(event -> {
-            if (matchComboBox.getValue() != null) {
-                try {
-                    mainApp.showScene4();
-                } catch (Exception ignore) {}
-            }
-        });
+        ChessAPIService apiService = new ChessAPIService();
+        ChessDataParser dataParser = new ChessDataParser();
+        String gameJson = apiService.getGamesFromArchive(archivio.getUrl());
+        this.parite  = dataParser.parseGames(gameJson);
+        String gamesStr = parite.toString().replace("[", "").replace("]", "").trim();
+        String[] gamesStrArr = gamesStr.split(",\\s*");
+
+        matchComboBox.getItems().addAll(gamesStrArr);
+
     }
 
     @FXML
     private void navigateToNextScene() {
         try {
-            mainApp.showScene4();
+
+            ChessGame partitaScelta = null;
+            for(ChessGame partita : parite){
+                if(partita.toString().equals(matchComboBox.getValue())){
+                    partitaScelta = partita;
+                }
+            }
+
+            mainApp.showScene4(partitaScelta);
         } catch (IOException ignore) {
 
         } catch (Exception e) {
@@ -51,8 +65,10 @@ public class Scene3Controller {
         }
     }
 
-    public void setMainApp(MainApp mainApp) {
+    public void initData(MainApp mainApp, ChessArchive archivio) throws IOException, InterruptedException {
         this.mainApp = mainApp;
+        this.archivio = archivio;
+        updateUI();
     }
 
 }

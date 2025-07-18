@@ -2,7 +2,13 @@ package org.example.UI.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.example.API.ChessAPIService;
+import org.example.API.ChessArchive;
+import org.example.API.ChessDataParser;
 import org.example.UI.MainApp;
+
+import java.io.IOException;
+import java.util.List;
 
 public class Scene2Controller {
     @FXML
@@ -12,6 +18,8 @@ public class Scene2Controller {
 
     private MainApp mainApp;
     private String userName;
+
+    private List<ChessArchive> archivi;
 
     @FXML
     private void initialize() {
@@ -30,25 +38,36 @@ public class Scene2Controller {
     }
 
     // Inizializza con i dati necessari
-    public void initData(MainApp mainApp, String userName) {
+    public void initData(MainApp mainApp, String userName) throws IOException, InterruptedException {
         this.mainApp = mainApp;
         this.userName = userName;
         updateUI();
     }
 
-    private void updateUI() {
+    private void updateUI() throws IOException, InterruptedException {
         userNameLabel.setText("Utente: " + userName);
-        archiveComboBox.getItems().addAll(
-                "Torneo 2023",
-                "Partite amichevoli",
-                "Campionato regionale"
-        );
+
+        ChessDataParser parser = new ChessDataParser();
+        ChessAPIService apiService = new ChessAPIService();
+
+        String archiviJson =  apiService.getGameArchives(userName);
+        this.archivi = parser.parseArchives(archiviJson);
+        String archiviStr = archivi.toString().replace("[", "").replace("]", "").trim();
+        String[] archiviStrArr = archiviStr.split(",\\s*");
+        archiveComboBox.getItems().addAll(archiviStrArr);
     }
 
     private void navigateToNextScene() {
         if (mainApp != null) {
             System.out.println(userName + " ha selezionato: " + archiveComboBox.getValue());
-            mainApp.showScene3();
+            ChessArchive scelto = null;
+            for(ChessArchive a: archivi){
+                if(a.toString().equals(archiveComboBox.getValue())){
+                    scelto = a;
+                }
+            }
+            assert scelto != null;
+            mainApp.showScene3(scelto);
         } else {
             System.err.println("Errore: mainApp è null!");
             // Mostra un alert all'utente

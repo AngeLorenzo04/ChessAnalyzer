@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.example.API.ChessArchive;
+import org.example.API.ChessGame;
 import org.example.UI.controllers.Scene1Controller;
 import org.example.UI.controllers.Scene2Controller;
 import org.example.UI.controllers.Scene3Controller;
@@ -45,30 +47,33 @@ public class MainApp extends Application {
             controller.initData(this, userName); // Passa sia mainApp che userName
 
             primaryStage.getScene().setRoot(root);
-        } catch (IOException ignore) {}
+        } catch (IOException ignore) {} catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void showScene3() {
+    public void showScene3(ChessArchive archivio) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene3.fxml"));
             Parent root = loader.load();
 
             Scene3Controller controller = loader.getController();
-            controller.setMainApp(this);
+            controller.initData(this,archivio);
 
             primaryStage.getScene().setRoot(root);
-        } catch (IOException ignore) {}
+        } catch (IOException ignore) {} catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void showScene4() throws Exception {
+    public void showScene4(ChessGame partita) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene4.fxml"));
         Parent root = loader.load();
 
         Scene4Controller controller = loader.getController();
-        controller.setMainApp(this);
+        controller.initData(this,partita);
 
-        primaryStage.setScene(new Scene(root, 600, 400));
-        primaryStage.show();
+        primaryStage.getScene().setRoot(root);
     }
 
     public static void main(String[] args) {

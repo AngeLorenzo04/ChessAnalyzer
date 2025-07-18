@@ -1,41 +1,82 @@
 package org.example.UI.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
+import org.example.API.ChessGame;
 import org.example.UI.MainApp;
+import org.example.analysis.ChessAnalyzer;
+import org.example.analysis.PgnToUciConverter;
+import org.example.utils.PgnUtils;
+
+import java.io.IOException;
+import java.util.List;
 
 public class Scene4Controller {
 
     private MainApp mainApp;
 
     @FXML
-    private TextArea notesTextArea;
+    private TextArea textArea;
+
+    private ChessGame partitaSelezionata;
 
     @FXML
-    private Button backButton;
-
-    @FXML
-    private Button confirmButton;
-
-    @FXML
-    private void initialize() {
-        backButton.setOnAction(event -> {
-            try {
-                mainApp.showScene3();
-            } catch (Exception ignore) {
-            }
-        });
-
-        confirmButton.setOnAction(event -> {
-            // Logica per conferma finale
-            System.out.println("Note inserite: " + notesTextArea.getText());
-            // Qui potresti chiudere l'applicazione o mostrare un messaggio
-        });
+    private void navigateToPreviusScene() {
+        try {
+            mainApp.showScene1();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void setMainApp(MainApp mainApp) {
+    @FXML
+    private void navigateToNextScene() throws IOException, InterruptedException {
+
+        if (mainApp != null) {
+            System.out.println("=========== ANALISI PARTITA ==========");
+            analyze(textArea.getText());
+        } else {
+            System.err.println("Errore: mainApp è null!");
+            // Mostra un alert all'utente
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Errore");
+            alert.setHeaderText("Errore di navigazione");
+            alert.setContentText("Impossibile procedere. Si è verificato un errore interno.");
+            alert.showAndWait();
+        }
+    }
+
+    private void analyze(String movesPGN) throws IOException, InterruptedException {
+
+        String INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        ChessAnalyzer analyzer = new ChessAnalyzer();
+
+
+        String cleanMovesPGN = PgnUtils.cleanForCompactFormat(movesPGN);
+        List<String> movesUCI  = PgnToUciConverter.convertPgnToUci(cleanMovesPGN);
+
+        analyzer.startStockfish();
+        System.out.println("Stockfish avviato correttamente");
+
+        List<ChessAnalyzer.EvaluationResult> results = analyzer.analyzeMoves(INITIAL_FEN,movesUCI);
+
+        System.out.println(movesUCI);
+        for(ChessAnalyzer.EvaluationResult result : results){
+            System.out.println(result);
+        }
+    }
+
+    private void updateUI() {
+
+        textArea.setText(partitaSelezionata.getPgn());
+
+    }
+
+    public void initData(MainApp mainApp, ChessGame partitaSelezionata)  {
         this.mainApp = mainApp;
+        this.partitaSelezionata = partitaSelezionata;
+        updateUI();
     }
 
 }

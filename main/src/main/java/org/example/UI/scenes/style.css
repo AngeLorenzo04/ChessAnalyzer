@@ -73,7 +73,7 @@
     -fx-border-radius: 8px;
     -fx-padding: 10px 15px;
     -fx-font-size: 14px;
-    -fx-pref-width: 350px;
+    -fx-pref-width: 200px;
     -fx-background-radius: 8px;
 }
 
@@ -128,15 +128,18 @@
 }
 /* Riduci la larghezza dei campi di input */
 .text-field, .combo-box {
-    -fx-pref-width: 250px;  /* Ridotto da 350px */
+    -fx-pref-width: 200px;  /* Ridotto da 350px */
 }
 
 /* Stile per il container della scena 1 */
 .scene-1 .scene-container {
-    -fx-max-width: 400px;  /* Ridotto da 500px */
+    -fx-max-width: 200px;  /* Ridotto da 500px */
     -fx-padding: 30px;     /* Ridotto da 40px */
 }
 
+.textField{
+
+}
 /* Effetto per campi non validi */
 .invalid-field {
     -fx-border-color: #ff7675 !important;

@@ -31,7 +31,7 @@ public class Main {
 
              String movesPGN = game.getPgn();
              String cleanMovesPGN = PgnUtils.cleanForCompactFormat(movesPGN);
-            List<String> movesUCI  = PgnToUciConverter.convertPgnToUci(cleanMovesPGN);
+             List<String> movesUCI  = PgnToUciConverter.convertPgnToUci(cleanMovesPGN);
 
             analyzer.startStockfish();
             System.out.println("Stockfish avviato correttamente");

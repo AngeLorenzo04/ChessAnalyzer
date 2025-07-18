@@ -15,7 +15,7 @@ import static org.example.utils.FenUtils.getPlayerColor;
  * Fornisce metodi per valutare posizioni, suggerire mosse ottimali e convertire tra formati.
  */
 public class ChessAnalyzer {
-    public static final String STOCKFISH_PATH = "main/src/main/stockfish/stockfish";
+    public static final String STOCKFISH_PATH = "src/main/stockfish/stockfish";
     public static final int ANALYSIS_DEPTH = 10;
 
     private OutputStreamWriter writer;
@@ -217,7 +217,7 @@ public class ChessAnalyzer {
                 if (legalMoves.contains(bestMove)) {
                     return bestMove;
                 }
-                return legalMoves.isEmpty() ? "N/A" : legalMoves.get(0);
+                return legalMoves.isEmpty() ? "N/A" : legalMoves.getFirst();
             }
         }
         return "N/A";
@@ -341,11 +341,6 @@ public class ChessAnalyzer {
             if (reader.ready()) {
                 return reader.readLine();
             }
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
         }
         return null;
     }
@@ -388,10 +383,8 @@ public class ChessAnalyzer {
 
         } catch (IOException e) {
             System.err.println("Errore durante l'analisi: " + e.getMessage());
-            e.printStackTrace();
         } catch (Exception e) {
             System.err.println("Errore generico: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

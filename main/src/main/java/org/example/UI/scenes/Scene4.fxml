@@ -14,10 +14,10 @@
     <Text text="Note finali" styleClass="scene-title"/>
 
     <Label text="Inserisci le tue note:" />
-    <TextArea fx:id="notesTextArea" promptText="Scrivi qui le tue osservazioni..." styleClass="transition-all interactive"/>
+    <TextArea fx:id="textArea" promptText="Scrivi qui le tue osservazioni..." styleClass="transition-all interactive"/>
 
     <HBox styleClass="nav-buttons">
-        <Button text="Indietro" fx:id="backButton" styleClass="button-secondary transition-all"/>
-        <Button text="Conferma" fx:id="confirmButton" styleClass="transition-all"/>
+        <Button text="Indietro" styleClass="button-secondary transition-all" onAction="#navigateToPreviusScene"/>
+        <Button text="Analizza" styleClass="transition-all" onAction="#navigateToNextScene"/>
     </HBox>
 </VBox>
