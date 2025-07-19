@@ -79,7 +79,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>org.example.UI.board.ChessGuiApp</mainClass> <!-- ← Cambia con il tuo -->
+                    <mainClass>org.example.UI.MainApp</mainClass>
                 </configuration>
             </plugin>
 

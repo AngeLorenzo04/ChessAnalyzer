@@ -172,13 +172,15 @@ public class ChessAnalyzer {
     public List<EvaluationResult> analyzeMoves(String initialFen, List<String> moves) throws IOException {
         List<EvaluationResult> results = new ArrayList<>();
         String currentFen = initialFen;
-
+        int i = 0;
         for (String move : moves) {
             // Verifica mossa legale
             List<String> legalMoves = getLegalMoves(currentFen);
             if (!legalMoves.contains(move)) {
                 System.err.println("Mossa non riconosciuta: " + move);
-                continue;  // Salta mosse non valide
+                moves.set(i,"Z");
+                i++;
+                continue;
             }
 
             String playerColor = getPlayerColor(currentFen);
@@ -310,7 +312,7 @@ public class ChessAnalyzer {
         }
     }
 
-    private List<String> getLegalMoves(String fen) throws IOException {
+    public List<String> getLegalMoves(String fen) throws IOException {
         clearInputBuffer();
         sendCommand("position fen " + fen);
         sendCommand("go perft 1");

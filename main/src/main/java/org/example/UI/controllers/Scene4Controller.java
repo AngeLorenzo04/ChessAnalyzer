@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import org.example.API.ChessGame;
 import org.example.UI.MainApp;
+import org.example.UI.board.ChessGuiApp;
 import org.example.analysis.ChessAnalyzer;
 import org.example.analysis.PgnToUciConverter;
 import org.example.utils.PgnUtils;
@@ -55,6 +56,10 @@ public class Scene4Controller {
 
         String cleanMovesPGN = PgnUtils.cleanForCompactFormat(movesPGN);
         List<String> movesUCI  = PgnToUciConverter.convertPgnToUci(cleanMovesPGN);
+        String[] arrMovesUCI = new String[movesUCI.size()];
+        for(int i = 0; i < movesUCI.size();i++){
+            arrMovesUCI[i] = movesUCI.get(i);
+        }
 
         analyzer.startStockfish();
         System.out.println("Stockfish avviato correttamente");
@@ -62,9 +67,15 @@ public class Scene4Controller {
         List<ChessAnalyzer.EvaluationResult> results = analyzer.analyzeMoves(INITIAL_FEN,movesUCI);
 
         System.out.println(movesUCI);
+        if(movesUCI.contains("Z")){
+            arrMovesUCI[0] = "Z";
+        }
         for(ChessAnalyzer.EvaluationResult result : results){
             System.out.println(result);
         }
+
+        ChessGuiApp board = new ChessGuiApp(arrMovesUCI);
+        board.initBoard( mainApp.primaryStage);
     }
 
     private void updateUI() {

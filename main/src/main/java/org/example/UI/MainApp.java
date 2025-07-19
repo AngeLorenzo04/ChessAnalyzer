@@ -17,12 +17,12 @@ import java.io.IOException;
 
 public class MainApp extends Application {
 
-    private Stage primaryStage;
+    public Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Applicazione Multi-Scena");
+        this.primaryStage.setTitle("ChessAnalyzer");
         showScene1();
     }
 
