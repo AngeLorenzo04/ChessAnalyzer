@@ -3,16 +3,7 @@ package org.example.API;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ChessGame {
-    private final String pgn;
-
-    public ChessGame(String pgn) {
-        this.pgn = pgn;
-    }
-
-    public String getPgn() {
-        return pgn;
-    }
+public record ChessGame(String pgn) {
 
     public static String formatPlayersAndDate(String inputText) {
         // Estrae i valori dei tag White, Black e Date usando regex

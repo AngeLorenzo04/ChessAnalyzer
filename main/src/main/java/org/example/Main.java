@@ -29,7 +29,7 @@ public class Main {
              List<ChessGame> games = dataParser.parseGames(gamesJSON);
              ChessGame game = cli.selectGame().get();
 
-             String movesPGN = game.getPgn();
+             String movesPGN = game.pgn();
              String cleanMovesPGN = PgnUtils.cleanForCompactFormat(movesPGN);
              List<String> movesUCI  = PgnToUciConverter.convertPgnToUci(cleanMovesPGN);
 

@@ -1,11 +1,8 @@
 package org.example.analysis;
-
-
-import org.example.utils.Board;
-
 import java.io.*;
 import java.util.*;
 
+import static org.example.utils.BoardUtils.loadFromFen;
 import static org.example.utils.ChessUtils.getPieceName;
 import static org.example.utils.FenUtils.getPieceAtSquare;
 import static org.example.utils.FenUtils.getPlayerColor;
@@ -172,14 +169,12 @@ public class ChessAnalyzer {
     public List<EvaluationResult> analyzeMoves(String initialFen, List<String> moves) throws IOException {
         List<EvaluationResult> results = new ArrayList<>();
         String currentFen = initialFen;
-        int i = 0;
         for (String move : moves) {
             // Verifica mossa legale
             List<String> legalMoves = getLegalMoves(currentFen);
             if (!legalMoves.contains(move)) {
                 System.err.println("Mossa non riconosciuta: " + move);
-                moves.set(i,"Z");
-                i++;
+                moves.set(0,"Z");
                 continue;
             }
 
@@ -259,8 +254,7 @@ public class ChessAnalyzer {
             case "e1c1", "e8c8" -> { return "O-O-O"; }
         }
 
-        Board board = new Board();
-        board.loadFromFen(fen);
+        loadFromFen(fen);
         return new Move(uciMove).toString();
     }
 

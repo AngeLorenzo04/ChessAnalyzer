@@ -17,12 +17,6 @@ public class ChessCLI {
         gameFuture = new CompletableFuture<>();
     }
 
-    /**
-     * Imposta il nome utente selezionato dall'interfaccia grafica
-     */
-    public void setUsername(String username) {
-        usernameFuture.complete(username);
-    }
 
     /**
      * Ottiene il nome utente dall'interfaccia grafica in modo asincrono
@@ -45,17 +39,4 @@ public class ChessCLI {
         return gameFuture;
     }
 
-    /**
-     * Mostra il PGN nell'interfaccia grafica
-     */
-    public void displayPGN() {
-        // Verrà implementato nella UI controller
-    }
-
-    /**
-     * Mostra un errore nell'interfaccia grafica
-     */
-    public void displayError() {
-        // Verrà implementato nella UI controller
-    }
 }

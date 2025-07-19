@@ -80,7 +80,7 @@ public class Scene4Controller {
 
     private void updateUI() {
 
-        textArea.setText(partitaSelezionata.getPgn());
+        textArea.setText(partitaSelezionata.pgn());
 
     }
 

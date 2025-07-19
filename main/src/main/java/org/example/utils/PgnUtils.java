@@ -12,10 +12,10 @@ public class PgnUtils {
         if (pgn == null || pgn.isEmpty()) return "";
 
         // 1. Rimuove commenti tra graffe
-        String pulito = pgn.replaceAll("\\{[^}]*\\}", "");
+        String pulito = pgn.replaceAll("\\{[^}]*}", "");
 
         // 2. Rimuove metadati tra parentesi quadre
-        pulito = pulito.replaceAll("\\[[^\\]]*\\]", "");
+        pulito = pulito.replaceAll("\\[[^]]*]", "");
 
         // 5. Rimuove doppi spazi e trim finale
         pulito = pulito.replaceAll("\\s+", " ").trim();

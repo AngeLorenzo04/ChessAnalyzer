@@ -1,18 +1,15 @@
 // File: Board.java
 package org.example.utils;
 
-/**
- * Rappresenta una scacchiera con stato e operazioni di base.
- * Gestisce la posizione dei pezzi e le mosse.
- */
-public class Board {
-    private final char[][] squares = new char[8][8];
+
+public class BoardUtils {
+    private static final char[][] squares = new char[8][8];
     /**
      * Carica una posizione dalla notazione FEN.
      *
      * @param fen La stringa FEN da caricare
      */
-    public void loadFromFen(String fen) {
+    public static void loadFromFen(String fen) {
         String[] parts = fen.split(" ");
         String[] rows = parts[0].split("/");
 
@@ -29,6 +26,5 @@ public class Board {
                 }
             }
         }
-        boolean whiteToMove = parts[1].equals("w");
     }
 }
