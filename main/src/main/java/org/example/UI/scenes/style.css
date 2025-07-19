@@ -126,10 +126,6 @@
 .interactive:hover {
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 3);
 }
-/* Riduci la larghezza dei campi di input */
-.text-field, .combo-box {
-    -fx-pref-width: 200px;  /* Ridotto da 350px */
-}
 
 /* Stile per il container della scena 1 */
 .scene-1 .scene-container {
@@ -144,4 +140,129 @@
 .invalid-field {
     -fx-border-color: #ff7675 !important;
     -fx-effect: dropshadow(gaussian, rgba(255,118,117,0.3), 5, 0, 0, 0);
+}
+
+/*------------------------/*
+/* Stili principali */
+.main-layout {
+    -fx-padding: 25;
+    -fx-alignment: center;
+    -fx-background-color: #2c3e50;
+}
+
+.board-box {
+    -fx-alignment: center;
+    -fx-padding: 15;
+    -fx-spacing: 15;
+    -fx-background-color: #34495e;
+    -fx-background-radius: 10;
+}
+
+.title-label {
+    -fx-font-family: "Verdana";
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Stili scacchiera */
+.chess-square {
+    -fx-border-color: #7f8c8d;
+    -fx-border-width: 0.5;
+}
+
+.white-square {
+    -fx-background-color: #f0d9b5;
+}
+
+.black-square {
+    -fx-background-color: #b58863;
+}
+
+.piece-text {
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.5), 1, 0, 1, 1);
+}
+
+.highlighted-square {
+    -fx-background-color: lightgreen;
+    -fx-border-color: #2ecc71;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(three-pass-box, rgba(46, 204, 113, 0.8), 10, 0, 0, 0);
+}
+
+/* Stili pannello commenti */
+.comment-panel {
+    -fx-pref-width: 350;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-background-color: #ecf0f1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.scroll-pane {
+    -fx-fit-to-width: true;
+    -fx-pref-height: 410; /* 80*8 + 50 */
+    -fx-background: #ecf0f1;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 10;
+}
+
+.comment-title {
+    -fx-font-family: "Verdana";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.comment-label {
+    -fx-padding: 10;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-font-family: "Verdana";
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+/* Stili pulsanti */
+.chess-button {
+    -fx-font-family: "Verdana";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.chess-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 3);
+}
+
+.next-button {
+    -fx-background-color: #27ae60;
+}
+
+.next-button:hover {
+    -fx-background-color: #2ecc71;
+}
+
+.prev-button {
+    -fx-background-color: #e67e22;
+}
+
+.prev-button:hover {
+    -fx-background-color: #f39c12;
+}
+
+.reset-button {
+    -fx-background-color: #3498db;
+}
+
+.reset-button:hover {
+    -fx-background-color: #2980b9;
 }

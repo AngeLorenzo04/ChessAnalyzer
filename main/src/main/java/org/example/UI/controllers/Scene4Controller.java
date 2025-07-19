@@ -65,6 +65,14 @@ public class Scene4Controller {
         System.out.println("Stockfish avviato correttamente");
 
         List<ChessAnalyzer.EvaluationResult> results = analyzer.analyzeMoves(INITIAL_FEN,movesUCI);
+        String[] comments = new String[results.size()];
+        String[] bestMove = new String[results.size()];
+        int i = 0;
+        for(ChessAnalyzer.EvaluationResult result : results){
+            comments[i] = result.comment;
+            bestMove[i] = result.bestMove;
+            i++;
+        }
 
         System.out.println(movesUCI);
         if(movesUCI.contains("Z")){
@@ -74,8 +82,8 @@ public class Scene4Controller {
             System.out.println(result);
         }
 
-        ChessGuiApp board = new ChessGuiApp(arrMovesUCI);
-        board.initBoard( mainApp.primaryStage);
+        ChessGuiApp board = new ChessGuiApp(arrMovesUCI,comments,bestMove);
+        board.initializeUI( mainApp.primaryStage);
     }
 
     private void updateUI() {
