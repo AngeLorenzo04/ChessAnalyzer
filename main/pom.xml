@@ -35,8 +35,21 @@
             <version>${javafx.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.bhlangonijr</groupId>
+            <artifactId>chesslib</artifactId>
+            <version>1.3.4</version>
+        </dependency>
+
     </dependencies>
 
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <build>
         <resources>
@@ -66,7 +79,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>org.example.UI.MainApp</mainClass> <!-- ← Cambia con il tuo -->
+                    <mainClass>org.example.UI.board.ChessGuiApp</mainClass> <!-- ← Cambia con il tuo -->
                 </configuration>
             </plugin>
 
