@@ -31,6 +31,7 @@ public class ChessAPIService {
             throw new IOException("HTTP error " + response.statusCode() + ": " + response.body());
         }
 
+
         return response.body();
     }
 }

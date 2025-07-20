@@ -189,7 +189,7 @@ public class ChessAnalyzer {
 
             results.add(new EvaluationResult(
                     score,
-                    convertUciToSan(bestMove, currentFen),
+                    bestMove,
                     pieceMoved,
                     playerColor,
                     sanMove

@@ -39,8 +39,8 @@ public class MainApp extends Application {
         } catch (IOException ignore) {}
     }
 
-    public void showScene2(String userName) {
-        try {
+    public void showScene2(String userName) throws IOException {
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Scene2.fxml"));
             Parent root = loader.load();
 
@@ -48,9 +48,7 @@ public class MainApp extends Application {
             controller.initData(this, userName); // Passa sia mainApp che userName
 
             primaryStage.getScene().setRoot(root);
-        } catch (IOException ignore) {} catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     public void showScene3(ChessArchive archivio) {
