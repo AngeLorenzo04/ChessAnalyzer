@@ -1,145 +1,197 @@
-/* src/main/resources/org/example/UI/css/modern-style.css */
-
-/***** Variabili e Stili Globali *****/
-.root {
-    -fx-font-family: 'Segoe UI', 'Roboto', sans-serif;
-    -fx-font-size: 14px;
-    -fx-text-fill: #2d3436;
-    -fx-background-color: #f5f6fa;
-}
-
-/***** Componenti Base *****/
-/* Contenitore principale */
+/* style.css - Tema Scacchiera */
 .scene-container {
+    -fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);
     -fx-padding: 40px;
-    -fx-spacing: 25px;
     -fx-alignment: center;
-    -fx-background-color: white;
-    -fx-border-radius: 12px;
-    -fx-background-radius: 12px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);
-    -fx-background-insets: 0;
-    -fx-max-width: 500px;
 }
 
-/* Titoli */
+.scene-1 {
+    -fx-background-color: rgba(240, 217, 181, 0.95); /* Beige scacchiera */
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #b58863; /* Marrone scacchiera */
+    -fx-border-width: 3px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
 .scene-title {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
     -fx-font-size: 24px;
-    -fx-font-weight: 600;
-    -fx-text-fill: linear-gradient(to right, #0984e3, #00cec9);
-    -fx-padding: 0 0 25px 0;
+    -fx-font-weight: bold;
+    -fx-fill: #2c3e50; /* Blu scuro scacchiera */
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 2, 0, 1, 1);
 }
 
-/* Pulsanti */
-.button {
-    -fx-background-color: linear-gradient(to bottom right, #0984e3, #00cec9);
+Label {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 15px 0 8px 0;
+    -fx-font-weight: bold;
+}
+
+.textField {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 12px 15px;
+    -fx-pref-width: 250px; /* Larghezza specifica */
+    -fx-max-width: 280px;  /* Massima larghezza */
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #b58863; /* Bordo marrone scacchiera */
+    -fx-border-width: 2px;
+    -fx-prompt-text-fill: #7f8c8d;
+    -fx-background-color: #f8f1e5; /* Beige più chiaro */
+    -fx-effect: innershadow(one-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 0);
+}
+
+.textField:focused {
+    -fx-border-color: #2c3e50; /* Blu scuro quando focalizzato */
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(44, 62, 80, 0.3), 8, 0, 0, 0);
+}
+
+.nav-buttons {
+    -fx-alignment: center;
+    -fx-spacing: 15px;
+    -fx-padding: 20px 0 0 0;
+}
+
+.transition-all {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
-    -fx-font-weight: 600;
-    -fx-background-radius: 8px;
-    -fx-padding: 10px 25px;
+    -fx-padding: 12px 35px;
+    -fx-background-color: #b58863; /* Marrone scacchiera */
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 1px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(9,132,227,0.3), 10, 0, 0, 2);
-    -fx-border-width: 0;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 3);
 }
 
-.button:hover {
-    -fx-background-color: linear-gradient(to bottom right, #0984e3, #0984e3);
-    -fx-effect: dropshadow(gaussian, rgba(9,132,227,0.4), 15, 0, 0, 3);
+.transition-all:hover {
+    -fx-background-color: #a07154; /* Marrone più scuro */
+    -fx-border-color: #1a252f;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 4);
 }
 
-.button:pressed {
-    -fx-background-color: #0984e3;
-    -fx-effect: dropshadow(gaussian, rgba(9,132,227,0.2), 5, 0, 0, 1);
+.transition-all:pressed {
+    -fx-background-color: #8a6145;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+/* Stile per il contenitore principale */
+VBox {
+    -fx-spacing: 15px;
+    -fx-alignment: center;
+}
+
+/* Effetto legnoso per il pannello */
+.scene-1 {
+    -fx-background-image: url('wood-texture.jpg'); /* Opzionale: texture legno */
+    -fx-background-size: cover;
+    -fx-background-insets: 0;
+}
+
+
+
+.scene-2 {
+    -fx-pref-width: 350px;
+    -fx-background-color: rgba(240, 217, 181, 0.95);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #b58863;
+    -fx-border-width: 3px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
+.scene-2 Label {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 8px 0;
+    -fx-font-weight: bold;
+}
+
+.subtitle {
+    -fx-font-size: 16px !important;
+    -fx-text-fill: #2c3e50 !important;
+    -fx-padding: 15px 0 5px 0 !important;
+    -fx-font-weight: bold;
+}
+
+.user-label {
+    -fx-font-size: 16px !important;
+    -fx-text-fill: #2c3e50 !important;
+    -fx-padding: 5px 0 15px 0 !important;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+}
+
+.interactive {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 15px;
+    -fx-pref-width: 300px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #b58863;
+    -fx-border-width: 2px;
+    -fx-prompt-text-fill: #7f8c8d;
+    -fx-background-color: #f8f1e5;
+}
+
+.interactive:focused {
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(44, 62, 80, 0.3), 8, 0, 0, 0);
 }
 
 .button-secondary {
-    -fx-background-color: transparent;
-    -fx-text-fill: #636e72;
-    -fx-border-color: #b2bec3;
+    -fx-background-color: #95a5a6;
+    -fx-border-color: #7f8c8d;
     -fx-border-width: 1px;
-    -fx-border-radius: 8px;
 }
 
 .button-secondary:hover {
-    -fx-background-color: rgba(178, 190, 195, 0.1);
-    -fx-text-fill: #2d3436;
+    -fx-background-color: #7f8c8d;
+    -fx-border-color: #2c3e50;
 }
 
-/* Campi di input */
-.text-field, .combo-box, .text-area {
-    -fx-background-color: white;
-    -fx-border-color: #dfe6e9;
+.button-secondary:pressed {
+    -fx-background-color: #6c7a89;
+}
+
+.scene-2 .transition-all {
+    -fx-background-color: #b58863;
+    -fx-border-color: #2c3e50;
     -fx-border-width: 1px;
-    -fx-border-radius: 8px;
-    -fx-padding: 10px 15px;
-    -fx-font-size: 14px;
-    -fx-pref-width: 200px;
-    -fx-background-radius: 8px;
 }
 
-.text-field:focused, .combo-box:focused, .text-area:focused {
-    -fx-border-color: #74b9ff;
-    -fx-effect: dropshadow(gaussian, rgba(116,185,255,0.2), 10, 0, 0, 0);
+.scene-2 .transition-all:hover {
+    -fx-background-color: #a07154;
+    -fx-border-color: #1a252f;
 }
 
-.text-area {
-    -fx-pref-height: 150px;
-    -fx-pref-width: 400px;
-    -fx-font-family: 'Segoe UI', 'Roboto', sans-serif;
+.scene-2 .transition-all:pressed {
+    -fx-background-color: #8a6145;
 }
 
-.combo-box .list-cell {
-    -fx-padding: 8px 15px;
-}
-
-/* Barra di navigazione */
-.nav-buttons {
+/* Stili comuni per layout */
+VBox {
     -fx-spacing: 15px;
-    -fx-padding: 25px 0 0 0;
     -fx-alignment: center;
 }
 
-/* Etichette e testo */
-.label {
-    -fx-font-size: 14px;
-    -fx-text-fill: #636e72;
-    -fx-padding: 0 0 5px 5px;
-}
-
-/* Transizioni */
-.transition-all {
-    -fx-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-/***** Stili Specifici per Scena *****/
-/* Scena 1 - Inserimento nome */
-.scene-1 .scene-container {
-    -fx-background-color: white;
-}
-
-/* Scena 4 - Note finali */
-.scene-4 .scene-container {
-    -fx-pref-width: 550px;
-}
-
-/* Effetto hover per elementi interattivi */
-.interactive:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 3);
-}
-
-/* Stile per il container della scena 1 */
-.scene-1 .scene-container {
-    -fx-max-width: 200px;  /* Ridotto da 500px */
-    -fx-padding: 30px;     /* Ridotto da 40px */
-}
-
-.textField{
-
-}
-/* Effetto per campi non validi */
-.invalid-field {
-    -fx-border-color: #ff7675 !important;
-    -fx-effect: dropshadow(gaussian, rgba(255,118,117,0.3), 5, 0, 0, 0);
+HBox {
+    -fx-alignment: center;
 }
 
 /*------------------------/*

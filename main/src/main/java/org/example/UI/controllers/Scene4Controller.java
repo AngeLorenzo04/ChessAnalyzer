@@ -83,7 +83,7 @@ public class Scene4Controller {
         }
 
         ChessGuiApp board = new ChessGuiApp(arrMovesUCI,comments,bestMove);
-        board.initializeUI( mainApp.primaryStage);
+        board.initializeUI( mainApp.primaryStage, mainApp);
     }
 
     private void updateUI() {

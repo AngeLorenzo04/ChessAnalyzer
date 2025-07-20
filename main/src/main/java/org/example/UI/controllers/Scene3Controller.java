@@ -31,8 +31,12 @@ public class Scene3Controller {
         String gameJson = apiService.getGamesFromArchive(archivio.getUrl());
         this.parite  = dataParser.parseGames(gameJson);
         String gamesStr = parite.toString().replace("[", "").replace("]", "").trim();
-        String[] gamesStrArr = gamesStr.split(",\\s*");
-
+        String[] tmp = gamesStr.split(",\\s*");
+        String[] gamesStrArr = new String[tmp.length];
+        int k = 0;
+        for(int i = tmp.length - 1; i != 0 ; i--){
+            gamesStrArr[k++] = tmp[i];
+        }
         matchComboBox.getItems().addAll(gamesStrArr);
 
     }

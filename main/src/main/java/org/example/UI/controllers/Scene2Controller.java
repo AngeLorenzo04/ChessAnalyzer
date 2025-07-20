@@ -38,22 +38,36 @@ public class Scene2Controller {
     }
 
     // Inizializza con i dati necessari
-    public void initData(MainApp mainApp, String userName) throws IOException, InterruptedException {
+    public void initData(MainApp mainApp, String userName) {
         this.mainApp = mainApp;
         this.userName = userName;
         updateUI();
     }
 
-    private void updateUI() throws IOException, InterruptedException {
+    private void updateUI(){
         userNameLabel.setText("Utente: " + userName);
 
         ChessDataParser parser = new ChessDataParser();
         ChessAPIService apiService = new ChessAPIService();
 
-        String archiviJson =  apiService.getGameArchives(userName);
+        String archiviJson = null;
+        try {
+            archiviJson = apiService.getGameArchives(userName);
+        } catch (IOException | InterruptedException ignore) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERRORE: QUALCOSA E' ANDATO STORTO : (");
+            alert.setHeaderText(null);
+            alert.setContentText("Utente non trovato,\ninserisci il tuo nome utente di chess.com");
+            alert.showAndWait();
+        }
         this.archivi = parser.parseArchives(archiviJson);
         String archiviStr = archivi.toString().replace("[", "").replace("]", "").trim();
-        String[] archiviStrArr = archiviStr.split(",\\s*");
+        String[] tmp = archiviStr.split(",\\s*");
+        String[] archiviStrArr = new String[tmp.length];
+        int k = 0;
+        for(int i = tmp.length - 1; i != 0; i--){
+            archiviStrArr[k++] = tmp[i];
+        }
         archiveComboBox.getItems().addAll(archiviStrArr);
     }
 

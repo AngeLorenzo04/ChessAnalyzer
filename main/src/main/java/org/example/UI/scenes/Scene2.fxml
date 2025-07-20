@@ -8,7 +8,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.UI.controllers.Scene2Controller"
       stylesheets="@style.css"
-      styleClass="scene-2 scene-container"
+      styleClass="scene-2 scene-panel scene-container"
       spacing="15" alignment="CENTER">
 
     <Text text="Seleziona un archivio" styleClass="scene-title"/>
@@ -20,7 +20,7 @@
               promptText="Seleziona un archivio"/>
 
     <HBox styleClass="nav-buttons">
-        <Button text="Indietro" styleClass="button-secondary transition-all" onAction="#navigateToPreviusScene"/>
+        <Button text="Indietro" styleClass="transition-all" onAction="#navigateToPreviusScene"/>
         <Button text="Avanti" fx:id="nextButton" styleClass="transition-all" disable="true"/>
     </HBox>
 </VBox>

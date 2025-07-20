@@ -18,6 +18,6 @@
 
     <HBox styleClass="nav-buttons">
         <Button text="Indietro" styleClass="transition-all" onAction="#navigateToPreviusScene"/>
-        <Button text="Avanti" fx:id="nextButton" styleClass="transition-all" onAction="#navigateToNextScene"/>
+        <Button text="Avanti" styleClass="transition-all" onAction="#navigateToNextScene"/>
     </HBox>
 </VBox>

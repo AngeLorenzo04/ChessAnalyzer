@@ -17,7 +17,7 @@
     <TextArea fx:id="textArea" promptText="Scrivi qui le tue osservazioni..." styleClass="transition-all interactive"/>
 
     <HBox styleClass="nav-buttons">
-        <Button text="Indietro" styleClass="button-secondary transition-all" onAction="#navigateToPreviusScene"/>
+        <Button text="Indietro" styleClass="transition-all" onAction="#navigateToPreviusScene"/>
         <Button text="Analizza" styleClass="transition-all" onAction="#navigateToNextScene"/>
     </HBox>
 </VBox>
