@@ -10,6 +10,113 @@ Il programma effettua una richiesta HTTP all'API di chess.com, recupera gli arch
 
 ---
 
+
+## ♟️ Guida all’installazione: Stockfish & pgn-extract
+
+Questa guida spiega come installare Stockfish, uno dei motori scacchistici più forti, e pgn-extract, uno strumento per analizzare ed estrarre partite da file PGN.
+✅ Requisiti
+
+ - Java già installato (versione 11 o superiore)
+  
+ - Maven  
+  
+ - Accesso alla riga di comando (Terminale su macOS/Linux, Prompt o PowerShell su Windows)
+
+### 🔧 Installazione Stockfish
+🔹 Windows
+
+ - Vai alla pagina ufficiale:
+   - 👉 https://stockfishchess.org/download/
+
+ - Scarica la versione per Windows (ZIP).
+
+ - Estrai l’archivio ZIP in una cartella (es: C:\Programmi\Stockfish).
+
+ - Prendi nota del percorso dell'eseguibile, es:
+  ```
+    C:\Programmi\Stockfish\stockfish-windows-x86-64.exe
+  ```
+
+🔹 macOS
+
+  - Apri il Terminale.
+
+  - Se hai Homebrew installato, esegui:
+```
+  brew install stockfish
+```
+ - Verifica l’installazione:
+  ````
+    stockfish
+  ````
+🔹 Linux (Ubuntu/Debian)
+
+  - Apri il Terminale ed esegui:
+  ````
+  sudo apt update
+  sudo apt install stockfish
+  ````
+- Verifica:
+  ````
+    stockfish
+  ````
+## 🛠️ Installazione pgn-extract
+
+pgn-extract è un tool da riga di comando per elaborare file PGN.
+🔹 Windows
+
+- Scarica da:
+  - 👉 https://www.cs.kent.ac.uk/people/staff/djb/pgn-extract/
+
+- Scarica la versione Windows (ZIP) e decomprimi.
+
+- Copia il file pgn-extract.exe dove preferisci (es: C:\pgn-extract\).
+
+- Aggiungi il percorso a pgn-extract.exe alla variabile d’ambiente PATH (opzionale ma utile).
+
+🔹 macOS / Linux
+
+  - Apri il terminale:
+
+  - Installa via Homebrew (macOS):
+  ````
+    brew install pgn-extract
+  ````
+Oppure su Linux:
+  ````
+    sudo apt install pgn-extract
+  ````
+- Verifica:
+  ````
+    pgn-extract --version
+  ````
+## 🧪 Verifica installazione
+ - Stockfish
+  ````
+    stockfish
+  ````
+Dovresti vedere qualcosa tipo:
+  ````
+  Stockfish 16 by the Stockfish developers (see AUTHORS file)
+  ````
+- pgn-extract
+ ````
+    pgn-extract --version
+  ````
+## 📁 Integrazione nel progetto Java
+
+ - Posiziona l'eseguibile di Stockfish nella cartella resources/stockfish/ (come nel tuo progetto).
+
+ - Esegui pgn-extract da terminale o da Java usando ProcessBuilder.
+ - Eseguire il seguente comando per aggiornare le dipendenze maven
+  ````
+    mvn clean install
+  ````
+- Eseguire all'interno della cartella in cui è presente il file pom.xml il comando
+  ````
+      mvn javafx:run
+    ````
+---
 ## 🧩 Funzionalità Implementate
 
 - Selezione di una partita tramite API
@@ -92,7 +199,6 @@ ChessAnalyzer/
        │       │   ├── ApiUtils.java
        │       │   ├── ChessAPIService.java
        │       │   ├── ChessArchive.java
-       │       │   ├── ChessCLI.java
        │       │   ├── ChessDataParser.java
        │       │   └── ChessGame.java
        │       │
