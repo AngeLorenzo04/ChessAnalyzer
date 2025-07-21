@@ -10,7 +10,7 @@ Il programma effettua una richiesta HTTP all'API di chess.com, recupera gli arch
 
 ---
 
-## 🧩 Funzionalità Implementate (Step 1 & Step 2 & Step 3)
+## 🧩 Funzionalità Implementate
 
 - Selezione di una partita tramite API
   - endpoint: `https://api.chess.com/pub/player/{usrname}/games/archives/` -> recupera gli archivi mensili
@@ -20,19 +20,26 @@ Il programma effettua una richiesta HTTP all'API di chess.com, recupera gli arch
   - Parising del json ottenuto dalla richiesta -> gson
   - traduzione PGN to UCI -> pgn-extract
   - Analisi approfondita della partita -> stockfish
-- Generazione dei commenti e stampa
+- UI
+  - Scene1 -> inserimento username Chess.com -> richiesta 1
+  - Scene2 -> scelta archivio tra quelli del utente -> richiesta 2
+  - Scene3 -> scelta partita tra quelle presenti nel archivio selezionato -> richiesta 3
+  - Scene4 -> anteprima risultato della richiesta
+  - ChessBoard -> rappresentazione partita con commenti e highlight mosse migliori
 ---
 
 ## 🛠️ Tecnologie Utilizzate
 
-| Componente   | Tecnologia / Libreria |
-|--------------|-----------------------|
-| Linguaggio   | Java (17)             |
-| Build System | Maven                 |
-| Parsing JSON | Gson                  |
-| API          | chess.com Public API  |
-| Ambiente IDE | IntelliJ IDEA         |
-| PGN->UCI     | pgn-extract           |
+| Componente    | Tecnologia / Libreria |
+|---------------|-----------------------|
+| Linguaggio    | Java (17)             |
+| Build System  | Maven                 |
+| Parsing JSON  | Gson                  |
+| API           | chess.com Public API  |
+| Ambiente IDE  | IntelliJ IDEA         |
+| PGN->UCI      | pgn-extract           |
+| UI            | JavaFx, FXML          |
+| scacchiera    | chesslib              |
 
 ---
 
@@ -57,7 +64,7 @@ Persona persona = gson.fromJson(json, Persona.class);
 
 #### 📤 Da Oggetto Java a JSON (serializzazione)
 
-```java
+```
 Persona p = new Persona();
 p.nome = "Anna";
 p.eta = 30;
@@ -72,27 +79,38 @@ String json = gson.toJson(p);
 ## 📁 Struttura del Progetto
 ```
 ChessAnalyzer/
-├── src/
-│ └── main/
-│ ├── java/
-│ │ ├── analysis/
-│ │ │ ├── ChessAnalyzer.java // entrypoint CLI
-│ │ │ └── PgnToUciConverter.java // wrapper pgn-extract
-│ │ ├── API/
-│ │ │ ├── ChessAPIService.java // HTTP client
-│ │ │ ├── ChessArchive.java // modello JSON archivio
-│ │ │ ├── ApiUtils.java // contiene i modelli delle risposte
-│ │ │ ├── GamesResponse.java // modello JSON lista partite
-│ │ │ ├── ArchivesResponse.java // modello JSON archivio mensile
-│ │ │ └── ChessGame.java // modello singola partita
-│ │ └── utils/
-│ │ └── Main.java // init + help CLI
-│ └── resources/
-│     ├── pgn-extract // convertitore PGN->UCI
-│     └── stockfish/ // eseguibile Stockfish
-├── test/ // test unitari (JUnit + Mockito)
-├── pom.xml // configurazione Maven
-└── README.md // documentazione (questo file)
+└── src/
+   └── main/
+       ├── chesslib/                        # Libreria usata per facilitare la rappresentazione della scacchiera
+       ├── java/
+       │   └── org.example/
+       │       ├── analysis/                 # Modulo per l'analisi della partita
+       │       │   ├── ChessAnalyzer.java
+       │       │   └── PgnToUciConverter.java
+       │       │
+       │       ├── API/                      # Modulo di accesso ad API e parsing dati
+       │       │   ├── ApiUtils.java
+       │       │   ├── ChessAPIService.java
+       │       │   ├── ChessArchive.java
+       │       │   ├── ChessCLI.java
+       │       │   ├── ChessDataParser.java
+       │       │   └── ChessGame.java
+       │       │
+       │       ├── UI/                       # Interfaccia grafica (JavaFX)
+       │       │   ├── board/                # Scacchiera e visualizzazione
+       │       │   ├── controllers/          # Controller logico delle UI
+       │       │   ├── scenes/               # Scene principali dell'applicazione
+       │       │   └── MainApp.java          # Entry point della UI
+       │       │
+       │       └── utils/                    # Utilità per UI
+       │           ├── BoardUtils.java
+       │           ├── ChessUtils.java
+       │           ├── FenUtils.java
+       │           └── PgnUtils.java
+       │
+       └── resources/
+           ├── pgn-extract                   # programma di terze parti per conversione PGN-UCI
+           └── stockfish/                    # Motore Stockfish o altri file di risorse
 ```
 
 ---
@@ -165,4 +183,10 @@ Formato completo per archiviare partite.
   ```
   1. e4 e5 2. Nf3 Nc6 3. Bb5 a6
   ```
+---
+
+## 😊 ChessLib by(bhlangonijr) : 
+clicca [qui](https://github.com/bhlangonijr/chesslib?tab=readme-ov-file) per info
+utilizzaata nella UI per rappresentare con facilità i vari elementi della scacchiera
+case, pezzi, tavola ecc...
 ---

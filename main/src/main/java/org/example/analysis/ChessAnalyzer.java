@@ -12,7 +12,7 @@ import static org.example.utils.FenUtils.getPlayerColor;
  * Fornisce metodi per valutare posizioni, suggerire mosse ottimali e convertire tra formati.
  */
 public class ChessAnalyzer {
-    public static final String STOCKFISH_PATH = "src/main/stockfish/stockfish";
+    public static final String STOCKFISH_PATH = "src/main/resources/stockfish/stockfish";
     public static final int ANALYSIS_DEPTH = 10;
 
     private OutputStreamWriter writer;
