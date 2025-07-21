@@ -296,3 +296,29 @@ clicca [qui](https://github.com/bhlangonijr/chesslib?tab=readme-ov-file) per inf
 utilizzaata nella UI per rappresentare con facilità i vari elementi della scacchiera
 case, pezzi, tavola ecc...
 ---
+
+🎯 Come funzionano i commenti sulle mosse
+1. Cosa misura la differenza di punteggio
+
+Ogni mossa viene confrontata con la mossa migliore suggerita dal motore partendo dalla stessa posizione. La differenza tra:
+
+ -   il punteggio della mossa giocata,
+
+  -  e quello della mossa migliore,
+
+viene misurata in centipawn (1 pedone = 100 centipawn). Questa differenza è nota come centipawn loss (CPL).
+
+  -  Un centipawn ≈ 0.01 pedone.
+
+2. Soglie comuni per i commenti
+
+Basandosi su soglie usate da Lichess, Chess.com, e discussioni tecniche, ecco valori tipici:
+
+| CPL(centipawn) | categoria       |
+|----------------|-----------------|
+| = 0            | Mossa miglilore |
+| da 1 a 50      | Ottima          |
+| da 51 a 150    | Imprecisione    |
+| da 151 a 300   | Errore          |
+| da 300 in su   | Errore Grave    |
+---
