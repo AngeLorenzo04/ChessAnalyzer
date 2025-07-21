@@ -69,7 +69,7 @@ public class Scene4Controller {
         String[] bestMove = new String[results.size()];
         int i = 0;
         for(ChessAnalyzer.EvaluationResult result : results){
-            comments[i] = result.comment;
+            comments[i] = result.qualityComment;
             bestMove[i] = result.bestMove;
             i++;
         }

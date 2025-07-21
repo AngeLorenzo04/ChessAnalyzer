@@ -42,24 +42,6 @@ public class ChessAnalyzer {
         writer.write(command + "\n");
         writer.flush();
     }
-
-    /**
-     * Estrae il punteggio dalla risposta di Stockfish.
-     * @param line La riga di risposta da analizzare
-     * @return Stringa contenente il punteggio (es. "cp 20")
-     */
-
-    private String extractScore(String line) {
-        String[] parts = line.split(" ");
-        for (int i = 0; i < parts.length; i++) {
-            if (parts[i].equals("score")) {
-                return parts[i+1] + " " + parts[i+2]; // Restituisce "cp X" o "mate Y"
-            }
-        }
-        return "N/A";
-    }
-
-
     /**
      * Ottiene il FEN corrente dalla posizione di Stockfish.
      * @return Stringa FEN rappresentante la posizione corrente
@@ -82,79 +64,36 @@ public class ChessAnalyzer {
     public static class EvaluationResult {
         public String score;
         public String bestMove;
-        public String pieceMoved;  // Pezzo mosso (es. "Pedone", "Cavallo")
-        public String playerColor; // Colore del giocatore che ha mosso ("Bianco" o "Nero")
-        public String sanMove;     // Mossa in notazione SAN
-        public String comment;
+        public String pieceMoved;
+        public String playerColor;
+        public String sanMove;
+        public int cpDifference;
+        public String qualityComment;
 
-
-        /**
-         * Costruttore per il risultato dell'analisi.
-         * @param score Valutazione della posizione
-         * @param bestMove Mossa migliore suggerita
-         * @param pieceMoved Pezzo mosso
-         * @param playerColor Colore del giocatore
-         * @param sanMove Mossa in notazione SAN
-         */
-        public EvaluationResult(String score, String bestMove, String pieceMoved, String playerColor, String sanMove) {
+        public EvaluationResult(String score, String bestMove, String pieceMoved,
+                                String playerColor, String sanMove, int cpDifference) {
             this.score = score;
             this.bestMove = bestMove;
             this.pieceMoved = pieceMoved;
             this.playerColor = playerColor;
             this.sanMove = sanMove;
-            this.comment = GenerateComment(this.score);
+            this.cpDifference = cpDifference;
+            this.qualityComment = generateQualityComment(cpDifference);
         }
 
-        public String GenerateComment(String score){
-            // Pulisce la stringa da eventuali spazi
-            score = score.trim();
-
-            if (score.startsWith("mate") || score.startsWith("#")) {
-                // Gestione del matto
-                String numero = score.replaceAll("[^0-9-]", ""); // Estrae il numero
-                int mateIn = Integer.parseInt(numero);
-
-                if (mateIn > 0) {
-                    return "Matto in " + mateIn + " mosse. Vittoria forzata in vista!";
-                } else {
-                    return "Stai per essere matto in " + Math.abs(mateIn) + " mosse! Cerca una difesa disperata.";
-                }
-
-            } else if (score.startsWith("cp") || score.matches("[0-9.]+")) {
-                // Gestione delle valutazioni centipawn
-                double punteggio;
-                try {
-                    punteggio = Double.parseDouble(score.substring(3));
-                } catch (NumberFormatException e) {
-                    return "Valutazione non valida.";
-                }
-
-                if (punteggio > 3.0) {
-                    return "Grande vantaggio per il Bianco.";
-                } else if (punteggio > 1.0) {
-                    return "Chiaro vantaggio per il Bianco.";
-                } else if (punteggio > 0.3) {
-                    return "Lieve vantaggio per il Bianco.";
-                } else if (punteggio > -0.3) {
-                    return "Posizione equilibrata.";
-                } else if (punteggio > -1.0) {
-                    return "Lieve vantaggio per il Nero.";
-                } else if (punteggio > -3.0) {
-                    return "Chiaro vantaggio per il Nero.";
-                } else {
-                    return "Grande vantaggio per il Nero.";
-                }
-
-            } else {
-                return "Formato di valutazione non riconosciuto.";
-            }
+        private String generateQualityComment(int diff) {
+            if (diff == 0) return "Mossa migliore";
+            else if (diff <= 50) return "Ottima mossa";
+            else if (diff <= 150) return "Imprecisione";
+            else if (diff <= 300) return "Errore";
+            else return "Errore grave";
         }
 
 
         @Override
         public String toString() {
-            return playerColor + " muove " + pieceMoved + " (" + sanMove + "): " +
-                    "Valutazione: " + score + " | Mossa migliore: " + bestMove + " comment: " + comment;
+            return String.format("%s muove %s (%s): Δ = %dcp → %s (best: %s)",
+                    playerColor, pieceMoved, sanMove, cpDifference, qualityComment, bestMove);
         }
     }
 
@@ -169,36 +108,43 @@ public class ChessAnalyzer {
     public List<EvaluationResult> analyzeMoves(String initialFen, List<String> moves) throws IOException {
         List<EvaluationResult> results = new ArrayList<>();
         String currentFen = initialFen;
+
         for (String move : moves) {
-            // Verifica mossa legale
             List<String> legalMoves = getLegalMoves(currentFen);
             if (!legalMoves.contains(move)) {
-                System.err.println("Mossa non riconosciuta: " + move);
-                moves.set(0,"Z");
+                System.err.println("Mossa non riconosciuta o illegale: " + move);
                 continue;
             }
 
-            String playerColor = getPlayerColor(currentFen);
+            // Ottieni la mossa migliore da Stockfish
+            String bestMove = getValidBestMove(currentFen);
+
+            // Valuta la mossa giocata e quella migliore separatamente
+            int playedCp = evaluateSpecificMove(currentFen, move);
+            int bestCp = evaluateSpecificMove(currentFen, bestMove);
+
+            // Calcola differenza
+            int cpDiff = Math.abs(playedCp - bestCp);
+
+            // Descrizione della mossa
             String pieceMoved = getPieceMoved(currentFen, move);
             String sanMove = convertUciToSan(move, currentFen);
-
-            // Analisi posizione
-            sendCommand("position fen " + currentFen);
-            String bestMove = getValidBestMove(currentFen);
-            String score = getPositionScore();
+            String playerColor = getPlayerColor(currentFen);
 
             results.add(new EvaluationResult(
-                    score,
+                    "cp " + playedCp,
                     bestMove,
                     pieceMoved,
                     playerColor,
-                    sanMove
+                    sanMove,
+                    cpDiff
             ));
 
-            // Esegui mossa
+            // Aggiorna la posizione
             sendCommand("position fen " + currentFen + " moves " + move);
             currentFen = getCurrentFen();
         }
+
         return results;
     }
 
@@ -256,19 +202,6 @@ public class ChessAnalyzer {
 
         loadFromFen(fen);
         return new Move(uciMove).toString();
-    }
-
-    // Ottieni solo il punteggio
-    private String getPositionScore() throws IOException {
-        sendCommand("go depth " + ANALYSIS_DEPTH);
-        String line;
-        while ((line = reader.readLine()) != null) {
-            if (line.contains("bestmove")) break;
-            if (line.startsWith("info") && line.contains("score")) {
-                return extractScore(line);
-            }
-        }
-        return "N/A";
     }
 
     /**
@@ -340,6 +273,33 @@ public class ChessAnalyzer {
         }
         return null;
     }
+
+    private int evaluateSpecificMove(String fen, String move) throws IOException {
+        sendCommand("ucinewgame");
+        sendCommand("position fen " + fen + " moves " + move);
+        sendCommand("go depth " + ANALYSIS_DEPTH);
+
+        String line;
+        int cp = 0;
+
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("info") && line.contains("score cp")) {
+                String[] parts = line.split(" ");
+                for (int i = 0; i < parts.length; i++) {
+                    if (parts[i].equals("cp")) {
+                        try {
+                            cp = Integer.parseInt(parts[i + 1]);
+                        } catch (NumberFormatException e) {
+                            cp = 0;
+                        }
+                    }
+                }
+            }
+            if (line.startsWith("bestmove")) break;
+        }
+        return cp;
+    }
+
 
 
     public static void main(String[] args) {
