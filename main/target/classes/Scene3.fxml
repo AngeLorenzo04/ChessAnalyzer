@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.UI.controllers.Scene3Controller"
+      stylesheets="@style.css"
+      styleClass="scene-3 scene-container"
+      spacing="20" alignment="CENTER">
+
+    <Text text="Seleziona una partita" styleClass="scene-title"/>
+
+    <Label text="Partite disponibili:" />
+    <ComboBox fx:id="matchComboBox" promptText="Scegli una partita" styleClass="transition-all interactive"/>
+
+    <HBox styleClass="nav-buttons">
+        <Button text="Indietro" styleClass="transition-all" onAction="#navigateToPreviusScene"/>
+        <Button text="Avanti" styleClass="transition-all" onAction="#navigateToNextScene"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,320 @@
+/* style.css - Tema Scacchiera */
+.scene-container {
+    -fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e);
+    -fx-padding: 40px;
+    -fx-alignment: center;
+}
+
+.scene-1 {
+    -fx-background-color: rgba(240, 217, 181, 0.95); /* Beige scacchiera */
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #b58863; /* Marrone scacchiera */
+    -fx-border-width: 3px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
+.scene-title {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #2c3e50; /* Blu scuro scacchiera */
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.1), 2, 0, 1, 1);
+}
+
+Label {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 15px 0 8px 0;
+    -fx-font-weight: bold;
+}
+
+.textField {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 12px 15px;
+    -fx-pref-width: 250px; /* Larghezza specifica */
+    -fx-max-width: 280px;  /* Massima larghezza */
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #b58863; /* Bordo marrone scacchiera */
+    -fx-border-width: 2px;
+    -fx-prompt-text-fill: #7f8c8d;
+    -fx-background-color: #f8f1e5; /* Beige più chiaro */
+    -fx-effect: innershadow(one-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 0);
+}
+
+.textField:focused {
+    -fx-border-color: #2c3e50; /* Blu scuro quando focalizzato */
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(44, 62, 80, 0.3), 8, 0, 0, 0);
+}
+
+.nav-buttons {
+    -fx-alignment: center;
+    -fx-spacing: 15px;
+    -fx-padding: 20px 0 0 0;
+}
+
+.transition-all {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 12px 35px;
+    -fx-background-color: #b58863; /* Marrone scacchiera */
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 3);
+}
+
+.transition-all:hover {
+    -fx-background-color: #a07154; /* Marrone più scuro */
+    -fx-border-color: #1a252f;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 4);
+}
+
+.transition-all:pressed {
+    -fx-background-color: #8a6145;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);
+}
+
+/* Stile per il contenitore principale */
+VBox {
+    -fx-spacing: 15px;
+    -fx-alignment: center;
+}
+
+/* Effetto legnoso per il pannello */
+.scene-1 {
+    -fx-background-image: url('wood-texture.jpg'); /* Opzionale: texture legno */
+    -fx-background-size: cover;
+    -fx-background-insets: 0;
+}
+
+
+
+.scene-2 {
+    -fx-pref-width: 350px;
+    -fx-background-color: rgba(240, 217, 181, 0.95);
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #b58863;
+    -fx-border-width: 3px;
+    -fx-padding: 25px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 15, 0, 0, 5);
+}
+
+.scene-2 Label {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 8px 0;
+    -fx-font-weight: bold;
+}
+
+.subtitle {
+    -fx-font-size: 16px !important;
+    -fx-text-fill: #2c3e50 !important;
+    -fx-padding: 15px 0 5px 0 !important;
+    -fx-font-weight: bold;
+}
+
+.user-label {
+    -fx-font-size: 16px !important;
+    -fx-text-fill: #2c3e50 !important;
+    -fx-padding: 5px 0 15px 0 !important;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+}
+
+.interactive {
+    -fx-font-family: 'Verdana', Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 15px;
+    -fx-pref-width: 300px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-border-color: #b58863;
+    -fx-border-width: 2px;
+    -fx-prompt-text-fill: #7f8c8d;
+    -fx-background-color: #f8f1e5;
+}
+
+.interactive:focused {
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(44, 62, 80, 0.3), 8, 0, 0, 0);
+}
+
+.button-secondary {
+    -fx-background-color: #95a5a6;
+    -fx-border-color: #7f8c8d;
+    -fx-border-width: 1px;
+}
+
+.button-secondary:hover {
+    -fx-background-color: #7f8c8d;
+    -fx-border-color: #2c3e50;
+}
+
+.button-secondary:pressed {
+    -fx-background-color: #6c7a89;
+}
+
+.scene-2 .transition-all {
+    -fx-background-color: #b58863;
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 1px;
+}
+
+.scene-2 .transition-all:hover {
+    -fx-background-color: #a07154;
+    -fx-border-color: #1a252f;
+}
+
+.scene-2 .transition-all:pressed {
+    -fx-background-color: #8a6145;
+}
+
+/* Stili comuni per layout */
+VBox {
+    -fx-spacing: 15px;
+    -fx-alignment: center;
+}
+
+HBox {
+    -fx-alignment: center;
+}
+
+/*------------------------/*
+/* Stili principali */
+.main-layout {
+    -fx-padding: 25;
+    -fx-alignment: center;
+    -fx-background-color: #2c3e50;
+}
+
+.board-box {
+    -fx-alignment: center;
+    -fx-padding: 15;
+    -fx-spacing: 15;
+    -fx-background-color: #34495e;
+    -fx-background-radius: 10;
+}
+
+.title-label {
+    -fx-font-family: "Verdana";
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Stili scacchiera */
+.chess-square {
+    -fx-border-color: #7f8c8d;
+    -fx-border-width: 0.5;
+}
+
+.white-square {
+    -fx-background-color: #f0d9b5;
+}
+
+.black-square {
+    -fx-background-color: #b58863;
+}
+
+.piece-text {
+    -fx-font-family: "Arial";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.5), 1, 0, 1, 1);
+}
+
+.highlighted-square {
+    -fx-background-color: lightgreen;
+    -fx-border-color: #2ecc71;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(three-pass-box, rgba(46, 204, 113, 0.8), 10, 0, 0, 0);
+}
+
+/* Stili pannello commenti */
+.comment-panel {
+    -fx-pref-width: 350;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+    -fx-background-color: #ecf0f1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.scroll-pane {
+    -fx-fit-to-width: true;
+    -fx-pref-height: 410; /* 80*8 + 50 */
+    -fx-background: #ecf0f1;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 10;
+}
+
+.comment-title {
+    -fx-font-family: "Verdana";
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.comment-label {
+    -fx-padding: 10;
+    -fx-border-color: #bdc3c7;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 5;
+    -fx-font-family: "Verdana";
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+}
+
+/* Stili pulsanti */
+.chess-button {
+    -fx-font-family: "Verdana";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+.chess-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 3);
+}
+
+.next-button {
+    -fx-background-color: #27ae60;
+}
+
+.next-button:hover {
+    -fx-background-color: #2ecc71;
+}
+
+.prev-button {
+    -fx-background-color: #e67e22;
+}
+
+.prev-button:hover {
+    -fx-background-color: #f39c12;
+}
+
+.reset-button {
+    -fx-background-color: #3498db;
+}
+
+.reset-button:hover {
+    -fx-background-color: #2980b9;
+}
