@@ -209,9 +209,8 @@ public class ChessGuiApp  {
                 moveHistory.add(move);
                 moveIndex++;
 
-                // Aggiorna le caselle interessate
-                updateSquare(from);
-                updateSquare(to);
+                // Aggiorna l'intera scacchiera per /
+                createChessboard();
 
             } catch (Exception e) {
                 showIllegalMoveAlert(uci);
